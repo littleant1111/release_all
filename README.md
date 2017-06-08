@@ -4,3 +4,6 @@
 前端应用开发设计到 python sftp / paramiko / 多线程 / 和远程同步执行shell脚本等功能
 
 前端应用的前端技术布局部门采取magicbox 和bootstrap + 和自定义css布局、jquery+ ajax。
+
+前端demo： http://release.zdyw.tech/
+
