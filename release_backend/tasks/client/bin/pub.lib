@@ -1,0 +1,808 @@
+#本文件为函数库文件，供其他脚本调用
+# Filename: pub.lib
+# Revision: 1.1
+# Date: 2017/02/15
+# Email: sheng.huang@bqjr.cn
+
+# 功能：日志输出记录
+# 详细：调用方式 log_echo "记录内容"  每个函数中必须有 日志记录文件名 LOG_FILE
+# 返回值：记录的内容自动输入到文件中，并终端展示
+
+log_echo(){
+    echo "[ `date "+%Y-%m-%d %H:%M:%S"` ]" $* | tee -a ${LOG_FILE}
+}
+
+# 功能：命令执行结果判断
+# 详细：通过 $? 返回值进行判断，不成功记录日志，成功无记录
+# 输入参数：0个
+# 返回值：日志函数记录，并退出程序
+
+judgeCommandFailureExit(){
+    if [ $? -ne 0 ];then
+        log_echo "[error]" "Check the command execution failure, automatically exit"
+        exit 1
+    fi
+}
+
+# 功能：命令执行结果警告
+# 详细：通过 $? 返回值进行判断，不成功记录日志，成功无记录
+# 输入参数：0个
+# 返回值：日志函数记录，只给出警告记录
+
+judgeCommandFailureWarning(){
+    if [ $? -ne 0 ];then
+        log_echo "[Warning]" "Check the command execution fails, warning is given"
+    fi
+}
+
+# 功能：判断一个变量是否存在
+# 详细：使用test方式判断第一个输入参数，
+# 输入参数：1个  要判断的变量名
+# 返回值：正常 0  不正常 1 日志输出并记录
+
+judgmentVariableExist(){
+    typeset func=judgmentVariableExist
+    # 参数个数判断起到同样的作用，此处只有checkapp.sh 一处使用，故不做个数判断
+    #if [ $# -ne 1 ];then
+    #    log_echo "[error]" "${func}" "Parameter error usage : ${func} variablename"
+    #    return 1
+    #fi   
+
+	typeset variable=${1}
+	if [ ! -n "${variable}" ];then
+		log_echo "[error]" "${func}" "Detect the variable name does not exist, please check"
+        return 1
+	fi
+    return 0
+}
+
+# 功能：检查是否为root用户
+# 详细：通过linux命令 whoami 判断是否为 root用户  
+# 输入参数：0个
+# 返回值：正常 0  不正常 1 日志输出并记录
+
+detectionRootUser(){
+    typeset func=detectionRootUser
+    if [ $# -ne 0 ];then
+        log_echo "[error]" "${func}" "Parameter error usage : Function ${func} does not require any parameters"
+        return 1
+    fi
+    log_echo "[info]" "Starting test program currently running the user"
+    typeset runningUser=`whoami`
+    if [ ${runningUser} == "root" ];then
+        log_echo "[error]" "The current user to root, automatic withdrawal"
+        return 1
+    else
+        log_echo "[info]" "The current program is running for [${runningUser}]"
+    fi
+    return 0
+}
+
+# 功能：检查目录是否存在 || check directory exists  
+# 详细：使用test方式判断目录是否存在
+# 输入参数：1个 被判断目录名
+# 返回值：正常 0 不正常 1 
+# 注：函数光华所写
+
+checkDirExists(){
+    typeset func=checkDirExists
+    if [ $# -ne 1 ];then
+        log_echo "error" "${func}" "Parameter error ${func} directory."    
+        return 1
+    fi
+    typeset checkDir="$1"
+    if [ ! -d "${checkDir}" ];then
+        log_echo "error" "${func}" "Directory :[ ${checkDir} ] is not exists,please check."    
+        return 1
+    fi
+    #log_echo "info" "${func}" "Exit func ${func} with succesed."    
+    return 0 
+}
+
+# 检查多个文件是否存在 || check files exists 
+# 详细：使用test方式循环判断文件是否存在
+# 输入参数：1个 被判断目录名
+# 返回值：正常 0 不正常 1
+# 注：函数光华所写
+
+checkFilesExists(){
+    typeset func=checkFilesExists
+    if [ $# -lt 1 ];then
+        log_echo "error" "$func" "Parameter error . useage : $func file1 file2 ... "
+        return 1
+    fi 
+    typeset eachfile=""
+    for eachFile in $*;do
+        if [ ! -f "${eachFile}" ];then
+            log_echo "error" "$func" "The file :[  ${eachFile}  ] is not exists, please check"
+            return 1
+        fi    
+    done
+    #log_echo "info" "${func}" "Exit func ${func} with successed."
+    return 0    
+}
+
+# 功能：检查war包是否能正常解压 || Check whether the war file is unzip properly 
+# 详细：使用unzip命令测试解压并删除解压后的文件  输入：完整解压目录  更新包存放路径及包名
+# 输入参数：2个 第一个为包名 第二个为解压目录
+# 返回值：正常 0  不正常 1 日志输出并记录
+
+checkUnzipWar(){
+    typeset func=unzipWar
+    if [ $# -ne 2 ];then
+        log_echo "[error]" "${func}" "Parameter error usage : ${func} xx.war  unzipDir"
+        log_echo "[error]" "${func}" "You can use like this:${func} ceshi1.war ceshi1"
+        return 1
+    fi    
+    typeset pkgWarFile="$1"
+    typeset unzipDir="$2"    
+    # 判断包和解压目录是否存在
+    if [ ! -f "${pkgWarFile}" -o ! -d "${unzipDir}" ];then
+        log_echo "[error]" "${func}" "You must be make sure file:[ ${pkgWarFile}  ] exists, and dir:[  ${unzipDir}  ] not exists.please check"
+        return 1
+    fi
+
+    unzip -d ${unzipDir} ${pkgWarFile} >/dev/null 2>&1
+    if [ $? -ne 0 ];then
+        cd ${unzipDir} && rm -rf *
+        log_echo "[error]" "${func}" "Unzip file failed,CMD=[  unzip -d ${unzipDir} ${pkgWarFile}  ]"
+        return 1
+    fi
+    
+    cd ${unzipDir} && rm -rf *
+    log_echo "[info]" "Exit func ${func} with successed."
+    return 0    
+}
+
+# 功能：检查多个文件执行权限 || check files execute permissions 
+# 详细：使用test方式判断文件执行权限
+# 输入参数：大于1个  文件名
+# 返回值：正常 0  不正常 1 日志输出并记录
+
+checkFilesExecutePermissions(){
+    typeset func=checkFilesExecutePermissions
+    if [ $# -lt 1 ];then
+        log_echo "error" "$func" "Parameter error . useage : $func file1 file2 ... "
+        return 1
+    fi 
+    typeset eachfile=""
+    for eachFile in $*;do
+        # 判断文件是否存在
+        if [ ! -f "${eachFile}" ];then
+            log_echo "[error]" "${func}" "The file :[  ${eachFile}  ] is not exists, please check"
+            return 1
+        fi 
+
+        if [ ! -x "${eachFile}" ];then
+            log_echo "[error]" "$func" "The file :[  ${eachFile}  ] is not execute permissions, please check"
+            return 1
+        fi    
+    done
+    #log_echo "[info]" "${func}" "Exit func ${func} with successed."
+    return 0    
+}
+
+# 功能：检查文件夹写入权限 || Check the folder write access
+# 详细：通过往文件夹中写入临时文件测试是否有写入权限
+# 输入参数：1个 文件名
+# 返回值：正常 0  不正常 1 日志输出并记录
+
+checkTheFolderWriteAccess(){
+    typeset func=checkTheFolderWriteAccess
+    typeset filename=`date "+%Y%m%d%H%M%S"`PublishCheckFile.tmp
+    if [ $# -ne 1 ];then
+        log_echo "[error]" "${func}" "Parameter error . useage : $func Folder"
+        return 1
+    fi
+    # 判断文件夹是否存在
+    if [ ! -d "${1}" ];then
+        log_echo "[error]" "${func}" "${1} is not folder or not permissions. Please check"
+        return 1
+    fi
+    
+    touch ${1}/${filename}
+    if [ $? -ne 0 ];then
+        log_echo "[error]" "${func}" "Change folder to the current user does not have write access, please check"
+        return 1
+    else
+        rm ${1}/${filename} > /dev/null 2>&1
+        log_echo "[info]" "${func}" "The current user has write access to the folder ${1}"
+        return 0
+    fi
+}
+
+# 功能：检查基础命令是否存在 || Check whether the basic command is exist
+# 详细：通过linux命令 which 查看结果判断是否存在
+# 输入参数：1个  命令
+# 返回值：正常 0 不正常 1 日志输出并记录
+
+checkCommadExist(){
+    typeset func=checkCommadExist
+    typeset command=${1}
+    if [ $# -ne 1 ];then
+        log_echo "[error]" "${func}" "Parameter error . useage : $func command"
+        return 1
+    fi
+    which ${command} > /dev/null 2>&1
+    if [ $? -ne 0 ];then
+        log_echo "[error]" "${func}" "Test command ${command} does not exist or is not a command, please check"
+        return 1
+    else
+        log_echo "[info]" "${func}" "Command ${command} testing success"
+        return 0
+    fi
+}
+
+# 功能： 检查os硬件部分信息 || Check the OS hardware part information
+# 详细：通过执行命令结果记录日志中返回日志记录行数，由调用者查看输出日志行数CheckOsHardwareInformationLine查看内容
+# 输入参数：1个 要执行的命令
+# 返回命令行行数  实验证明 tail -n  |  wc -l 存在问题  无法解析
+# 返回值：正常 0 不正常 1 日志输出并记录
+
+CheckOsHardwareInformation(){
+    typeset func=CheckOsHardwareInformation
+    if [ $# -ne 1 ];then
+        log_echo "[error]" "${func}" "Parameter error . useage : $func command"
+        return 1
+    fi
+    
+    log_echo "[info]" "Begin to execute [[ ${1} ]] command"
+    typeset osinformation=`${1}`
+    CheckOsHardwareInformationLine=1
+    
+    while read line;do
+        echo "$line" >> ${LOG_FILE}
+        CheckOsHardwareInformationLine=`expr ${CheckOsHardwareInformationLine} + 1`
+    done <<!
+${osinformation}
+!
+    log_echo "[info]" "End of [[ ${1} ]] command execution" >> /dev/null 2>&1
+    return ${CheckOsHardwareInformationLine}
+}
+
+# 功能：检查apply应用是否符合 || check app 
+# 详细：检查应用类型是否为weblogic和tomcat 及是否为 full
+# 输入参数：2个  应用类型  更新类型
+# 返回值：正常 0 不正常 1 日志输出并记录
+
+checkApply(){
+    typeset func=checkApply
+    if [ $# -ne 2 ];then
+        log_echo "[error]" "Parameter error usage : ${func}  appname  upgradetype"
+        return 1
+    fi
+    log_echo "[info]" "Enter ${func} with successed."
+    typeset appname=${1}
+    typeset upgradetype=${2}
+    case "${appname}" in
+         weblogic)
+            ########## check upgrade type  ##
+            if [ "${upgradetype}" != "full" ];then
+                log_echo "[error]" "$func" "Not support upgrade type : [ ${upgradetype}  ] ,please check detail file ."
+                return 1
+            fi
+         ;; 
+         tomcat)
+            if [ "${upgradetype}" != "full" ];then
+                log_echo "[error]" "$func" "Not support upgrade type : [ ${upgradetype}  ] ,please check detail file ."
+                return 1
+            fi
+         ;; 
+         *)
+            log_echo "[error]" "$func" "App type item:[ ${appname} ] not set , please check detailconfigfile"
+            return 1
+         ;; 
+    esac
+    log_echo "[info]" "$func" "Check ${appname} and ${upgradetype} successed."
+    log_echo "[info]" "Exit ${func} with successed."
+    return 0
+}
+
+# 功能：备份app应用到对应目录 || backup  app to directory 
+# 详细：备份中转站 做应用类型的判断，实际调用下一个函数起作用。设计思路来源于光华的脚本 (ps 后面优化掉)
+# 输入参数：6个
+# 返回值：正常调用下一个函数，否者返回 1 记录日志
+
+backupApply(){
+    typeset func=backupApply
+    if [ $# -ne 6 ];then
+        log_echo "error" "${func}" "Parameter error usage : ${func} apptype backupdir projectname version localTime appdir"
+        return 1
+    fi
+    log_echo "[info]" "Enter ${func} with successed."
+   
+    the_apptype=${1}
+   
+    case "${the_apptype}" in
+     tomcat)
+        backupTomcatApply  ${2} ${3} ${4} ${5} ${6}
+     ;; 
+     weblogic)
+        log_echo "[error]" "Temporarily does not support the change should be type backup"
+        return 1
+     ;;  
+     *)
+        log_echo "error" "$func" "Not support env apptype :${the_apptype} ,so exit."
+        return 1
+     ;; 
+    esac 
+    log_echo "[info]" "Exit ${func} with successed."
+    return 0
+}
+
+# 功能：备份tomcat 应用到对应目录 || backup tomcat app #########
+# 详细：使用 tar -czf 方式压缩 然后mv到备份目录  命名方式为时间版本号拼接而成，没有正确完成自动退出，此处可优化，待测试
+# 输入参数：5个 备份目录名、项目名、版本号、时间名、应用目录
+# 返回值：正常 0  不正常 自动退出程序
+
+backupTomcatApply(){
+    typeset func=backupTomcatApply
+    if [ $# -ne 5 ];then
+        log_echo "error" "${func}" "Parameter error usage : ${func} tomcatBackupdirName tomcatBackupProjectName tomcatBackupVersion tomcatBackupTime pkgWebappsDir "
+        log_echo "error" "${func}" "Parameter error usage : ${func}  /bqbackup fc clf0908 20170120 /bq/clf_uat/webapps "
+        return 1
+    fi
+    log_echo "[info]" "$func" "Enter  ${func} with successed."
+    # tomcat备份目录名 backupdir[1]=/bqbackup
+    typeset tomcatBackupdirName="${1}"
+    
+    # 备份项目名 projectname=fc
+    typeset tomcatBackupProjectName="${2}"
+    
+    # 备份项目版本号 version=clf0908
+    typeset tomcatBackupVersion="${3}"
+    
+    # 备份时间名 20170217094343
+    typeset tomcatBackupTime="${4}"
+    
+    # 应用目录 pkgWebappsDir appdir[1]=/bq/clf_uat/webapps
+    typeset pkgWebappsDir="${5}/webapps"
+    
+    # 备份目录设定 projectname_version
+    tomcatBackupdir="${tomcatBackupdirName}/${tomcatBackupProjectName}_${tomcatBackupVersion}"
+    
+    # 备份名称设定 projectname_version_日期时间
+    tomcatBackupName="${tomcatBackupProjectName}_${tomcatBackupVersion}_${tomcatBackupTime}"
+    
+    log_echo "[info]" "$func" "Begin to backup ,please wait..."
+    if [ ! -d "${tomcatBackupdir}" ];then
+        mkdir -p ${tomcatBackupdir} 
+        judgeCommandFailureExit
+    fi
+    if [ ! -d "${pkgWebappsDir}" ];then
+        log_echo "[error]" "Tomcat webapps application directory does not exist"
+    else
+        cd ${pkgWebappsDir} && tar -czf ${tomcatBackupName}.tar.gz *
+        judgeCommandFailureExit
+        mv ${tomcatBackupName}.tar.gz ${tomcatBackupdir}
+        judgeCommandFailureExit
+    fi
+    
+    log_echo "[info]" "${func}" "Exit func ${func} with successed."
+    return 0    
+}
+
+# 功能：停止 tomcat || stop tomcat app
+# 详细：根据用户名和应用安装目录 找出程序pid 然后使用Kill方式  日志记录详细杀死程序信息  即ps -ef 相关信息
+# 输入参数：2个   用户名、应用安装目录
+# 返回值：正常 0 不正常 1 日志记录
+
+stopTomcatApply(){
+    typeset func=stopTomcatApply
+    if [ $# -ne 2 ];then
+        log_echo "[error]" "${func}" "Parameter error usage : ${func} user appdir"
+        return 1
+    fi
+    log_echo "[info]" "$func" "Enter  ${func} with successed."
+    # 启动tomcat的用户
+    typeset eachuser=${1}
+    
+    # tomcat安装目录
+    typeset eachappdir="${2}"
+    
+    getUserJavaProcessesId "${eachuser}" "${eachappdir}" || return 1
+    typeset eachuserids="${RETURN[0]}"
+    if [ -z "${eachuserids}" ];then
+        log_echo "[info]" "$func" "Not found java processes ,so exist."
+        return 0
+    fi
+        
+    for eachuserid in `echo "${eachuserids}"`;do
+        log_echo "[info]" "To kill the process number ${eachuserid}"
+        # 记录即将杀死进程详细信息
+        typeset processesInformaiton=`ps -ef | grep ${eachuserid} | grep java | grep ${eachuser} | grep ${eachappdir}` >> /dev/null 2>&1
+        log_echo "[info]" "Process details are as follows"
+        log_echo "${processesInformaiton}"
+        kill -9 ${eachuserid}
+        #if [ $? -ne 0 ];then
+        #    log_echo "[error]" "${func}" "Exec command error , CMD = [  kill -9 ${eachuserid}   ]"
+        #    return 1
+        #fi
+        
+        # 3秒后检查确认停止成功，否则退出
+        log_echo "[info]" "After 3 seconds after confirm whether stop success, failure automatically exit"
+        sleep 3
+        getUserJavaProcessesId "${eachuser}" "${eachappdir}" || return 1
+        typeset userprocessesids="${RETURN[0]}" 
+        typeset processesnum=`echo "${userprocessesids}" | awk '{print $NF}'`
+        if [ -z ${processesnum} ];then
+            log_echo "[info]" "Not found java processes, Confirm the application to stop success"
+        else
+            log_echo "[error]" "Application stop failure, process number is ${processesnum}, automatically exit"
+            return 1
+        fi
+    done
+    log_echo "[info]" "$func" "stop tomcat successed. : tomcat dir: [  ${eachappdir}  ] with user : [    ${eachuser}   ]  pid : [ ${eachuserid}  ]"
+    log_echo "[info]" "Exit func ${func} with successed."
+    return 0
+}
+
+# 功能：启动tomcat如果没有运行 | start tomcat if not start
+# 详细： 根据用户名和安装路径 判断是否已运行，否则启动应用，在规定时间内，根据日志输出文件catalina.out 文件查看是否有关键字，日志记录会记录启动时用到的包名
+# 输入参数：4个  包名、用户、应用目录、启动时间 
+# 返回值：0  日志记录
+
+startTomcatApply(){
+    typeset func=startTomcatApply
+    if [ $# -ne 4 ];then
+        log_echo "error" "${func}" "Parameter error usage : ${func} pkgname user appdir startuptime"
+        return 1
+    fi
+    # 更新包包名
+    typeset eachpkgname=${1}
+    # 更新用户名
+    typeset eachuser=${2}
+    # 应用所在路径
+    typeset eachappdir=${3}
+    # 应用启动时间
+    typeset eachstartuptime=${4}
+    # 应用启用端口 暂未使用
+    # typeset eachport=${5}
+    # 应用输出日志
+    typeset logfile=${eachappdir}/logs/catalina.out
+    typeset sleepTime=10
+        
+    # check tomcat is started ? #
+    getUserJavaProcessesId  "${eachuser}" "${eachappdir}"
+    userprocessesids="${RETURN[0]}"
+    processesnum=`echo "${userprocessesids}" | awk '{print $NF}'`
+    if [ -z ${processesnum} ];then
+        nohup ${eachappdir}/bin/catalina.sh start &             
+        checkTomcatLogStarted  "${logfile}"  "${eachstartuptime}"  "${sleepTime}" || return 1    
+        log_echo "[info]" "$func" "Started app:  pkg: [ ${eachpkgname} ],tomcat dir: [ ${eachappdir} ] with user : [ ${eachuser} ] ."
+    elif [  "${processesnum}"  -ge 2 ];then
+        log_echo "[warn]" "$func" "Found two or more processes user: [ ${eachuser}  ] processes id : [ ${userprocessesids}  ], so exist . "
+        return 0
+    elif [  "${processesnum}"  -eq 1 ];then
+        log_echo "[info]" "$func" "Found a processes with user: [ ${eachuser}  ] processes id : [ ${userprocessesids}  ] is running . "
+        return 0
+    else
+        # 此处判断遵循光华的思路，会出现 unary operator expected 后续需改进 
+        nohup ${eachappdir}/bin/catalina.sh start &             
+        checkTomcatLogStarted  "${logfile}"  "${eachstartuptime}"  "${sleepTime}" || return 1    
+        log_echo "[info]" "$func" "Started app:  pkg: [ ${eachpkgname} ],tomcat dir: [ ${eachappdir} ] with user : [ ${eachuser} ] ."
+    fi
+    log_echo "[info]" "Exit func ${func} with successed."
+    return 0
+}
+
+# 功能：更新tomcat || upgrade tomcat
+# 优化：此处已没有使用，等后期测试无误后可以删除
+
+upgradeTomcatApply_old(){
+    typeset func=upgradeTomcatApply_old
+    if [ $# -ne 4 ];then
+        log_echo "[error]" "${func}" "Parameter error usage : ${func} eachpkgname eachpkgdir eachuser eachappdir"
+        return 1
+    fi
+
+    # 更新包包名 || 只做有应该应用中有1个包的情况，暂不考虑多个
+    typeset eachpkgname=${1}
+    flag1=false
+    echo "${eachpkgname}" | grep "@" >> /dev/null 2>&1
+    if [ $? -eq 0 ];then
+        eachpkgname[1]=`echo "${eachpkgname}" | awk -F@ '{print $1}'`
+        eachpkgname[2]=`echo "${eachpkgname}" | awk -F@ '{print $2}'`
+        flag1=true
+    fi
+    # 更新包存放地址
+    typeset eachpkgdir=${2}
+    flag2=false
+    echo "${eachpkgdir}" | grep "@" >> /dev/null 2>&1
+    if [ $? -eq 0 ];then
+        eachpkgdir[1]=`echo "${eachpkgdir}" | awk -F@ '{print $1}'`
+        eachpkgdir[2]=`echo "${eachpkgdir}" | awk -F@ '{print $2}'`
+        flag2=true
+    fi
+    # 更新用户
+    typeset eachuser=${3}
+    # tomcat应用目录
+    typeset eachappdir=${4}
+        
+    prefixPkgName=`echo "${eachpkgname}" | awk -F'.war' '{print $1}'`
+    tomcatpkgdir="${eachappdir}/webapps/${prefixPkgName}"
+    tomcatwebappsdir="${eachappdir}/webapps"
+    
+    # 获取当前用户
+    typeset nowuser="`whoami`"
+    if [ "${nowuser}" == "${eachuser}" ];then
+        log_echo "[info]" "$func" "Now current user: ${nowuser} equel to config user: ${eachuser} ."
+        ##### delete work dir directory and files ####
+        # 删除缓存
+        log_echo "[info]" "$func" "Begin to update ,please wait..."
+        rm -rf ${eachappdir}/work/Catalina/*  ${eachappdir}/temp/* && rm -rf ${tomcatwebappsdir}/* && cp ${eachpkgdir} ${tomcatwebappsdir} 
+    else
+        log_echo "[error]" "$func" "The current user and user configuration file is not in conformity with the, automatically exit"
+        return 1
+    fi
+    if [ $? -ne 0 ];then
+        log_echo "[error]" "${func}" "Upgrade failed , CMD = [ rm -rf ${eachappdir}/work/Catalina/*  ${eachappdir}/temp/* && rm -rf ${tomcatwebappsdir}/* && cp ${eachpkgdir} ${tomcatwebappsdir} ]"
+        return 1
+    fi
+    log_echo "[info]" "$func" "Upgrade , pkg:[ ${eachpkgname} ],tomcat dir: [ ${tomcatwebappsdir} ] with user : [ ${eachuser} ] successed ."
+    log_echo "[info]" "Exit func ${func} with successed."
+    return 0    
+}
+
+# 功能：更新tomcat || upgrade tomcat 升级版 可适用多包情况
+# 详细：根据更新包存放路径和应用启动路径 直接cp 使用mv 命令移动缓存到发布脚本temp目录下 多包情况以@作为分隔符
+# 输入参数：4个 更新包包名、更新包存放路径、启动用户名、应用目录
+# 返回值：0 正常 1 不正常
+
+upgradeTomcatApply(){
+    typeset func=upgradeTomcatApply
+    if [ $# -ne 5 ];then
+        log_echo "[error]" "${func}" "Parameter error usage : ${func} eachpkgname eachpkgdir eachuser eachappdir tomcatBackupdir"
+        return 1
+    fi
+
+    # 更新包包名
+    typeset eachpkgname="${1}"
+    # 多包情况下以@为分隔符分割处理赋值变量
+    typeset warname=`echo "${eachpkgname}" | grep -o "@" | wc -l`
+    if [ ${warname} -gt 0 ];then
+        for ((i=1; i<=${warname}+1; i++));do
+            eachpkgname[$i]=`echo "${eachpkgname}" | cut -d"@" -f $i`
+        done
+    fi
+    
+    # 更新包存放地址 如: /xx/xx/a.war 
+    typeset eachpkgdir="${2}"
+    # 多包情况下以@为分隔符分割处理赋值变量 格式/xx/xx/a.war@/xx/xx/b.war
+    typeset warnumber=`echo "${eachpkgdir}" | grep -o "@" | wc -l`
+    if [ ${warnumber} -gt 0 ];then
+        for ((i=1; i<=${warnumber}+1; i++));do
+            eachpkgdir[$i]=`echo "${eachpkgdir}" | cut -d"@" -f $i`
+        done
+    fi
+    
+    # 更新用户
+    typeset eachuser="${3}"
+    # tomcat应用目录
+    typeset eachappdir="${4}"
+    
+    # 备份目录设定
+    typeset tomcatBackupdir="${5}"
+    
+    # 创建存储缓存和代码目录
+    log_echo "[info]" "Create a unique backup directory name [ ${tomcatBackupdir} ]"
+    mkdir -p "${tomcatBackupdir}/webapps"
+    judgeCommandFailureExit
+    mkdir "${tomcatBackupdir}/work" && mkdir "${tomcatBackupdir}/temp"
+    judgeCommandFailureExit
+    
+    # 获取当前用户
+    typeset nowuser="`whoami`"
+    
+    if [ "${nowuser}" == "${eachuser}" ];then
+        log_echo "[info]" "$func" "Now current user: [ ${nowuser} ] equel to config user: [ ${eachuser} ]"
+        
+        # 移动缓存 并拷贝更新包到tomcat中
+        log_echo "[info]" "$func" "Begin to update ,please wait..."
+        log_echo "[info]" "$func" "Execute the command : [ mv ${eachappdir}/work/* ${tomcatBackupdir}/work ] [ mv ${eachappdir}/temp/* ${tomcatBackupdir}/temp ] [ mv ${eachappdir}/webapps/* ${tomcatBackupdir}/webapps ] "
+        mv ${eachappdir}/work/* "${tomcatBackupdir}/work" 
+        judgeCommandFailureWarning
+        mv ${eachappdir}/temp/* "${tomcatBackupdir}/temp" 
+        judgeCommandFailureWarning
+        mv ${eachappdir}/webapps/* "${tomcatBackupdir}/webapps"
+        judgeCommandFailureExit
+        
+        # 判断包数量分情况处理
+        if [ ${warnumber} -gt 0 ];then
+            # rm -rf ${eachappdir}/work/Catalina/* ${eachappdir}/temp/* ${eachappdir}/webapps/*
+            for ((i=1; i<=${warnumber}+1; i++));do
+                cp ${eachpkgdir[$i]} ${eachappdir}/webapps
+            done
+        else
+            # rm -rf ${eachappdir}/work/Catalina/* ${eachappdir}/temp/* ${eachappdir}/webapps/* && cp ${eachpkgdir} ${eachappdir}/webapps 
+            cp ${eachpkgdir} ${eachappdir}/webapps
+        fi
+ 
+        # 判断命令是否执行成功 
+        if [ $? -ne 0 ];then
+            log_echo "[error]" "${func}" "Upgrade failed , CMD = [ cp ${eachpkgdir} ${eachpkgdir[1] ... } ${eachappdir}/webapps ]"
+            return 1
+        fi
+        
+    else
+        log_echo "[error]" "$func" "The current user and user configuration file is not in conformity with the, automatically exit"
+        return 1
+    fi
+    
+    # 根据包的数量判断输出结束日志
+    if [ ${warnumber} -gt 0 ];then
+        log_echo "[info]" "$func" "Upgrade ," 
+        for ((i=1; i<=${warnumber}+1; i++));do
+            log_echo "Package path: ${eachpkgdir[$i]} pkg: ${eachpkgname[$i]}"
+        done
+        log_echo "tomcat dir: [ ${eachappdir} ] with user : [ ${eachuser} ]  successed ."
+    else
+        log_echo "[info]" "$func" "Upgrade Package path: ${eachpkgdir} pkg: [ ${eachpkgname} ],tomcat dir: [ ${eachappdir} ] with user : [ ${eachuser} ]  successed ."
+    fi   
+    
+    log_echo "[info]" "Exit func ${func} with successed."
+    return 0 
+}
+
+# 本函数对pkgfile变量截取处理 如 /xx/xx/a.war@/xx/xx/b.war 结果为 a.war@b.war
+# 截取时以@作为分隔符
+# 单包情况则以 / 获取最后包名
+# 以子程序调用方式使用    
+
+stringToIntercept(){
+    typeset func=stringToIntercept
+    if [ $# -ne 1 ];then
+        log_echo "[error]" "Parameter error usage : ${func} pkgfile"
+        return 1 
+    fi  
+    
+    typeset pkgfile=${1}
+    
+    typeset warname=`echo "${pkgfile}" | grep -o "@" | wc -l`
+    
+    if [ ${warname} -gt 0 ];then
+        for ((i=1; i<=${warname}+1; i++));do
+            eachpkgname[$i]=`echo "${pkgfile}" | cut -d"@" -f $i | awk -F"/" '{print $NF}'`
+        done
+    fi  
+    
+    if [ ${warname} -gt 0 ];then
+        typeset a=""
+        for ((i=1; i<=${warname}+1; i++));do
+            a="${a}@${eachpkgname[$i]}"
+        done
+        typeset n=${#a}
+        typeset warNameResult=${a:1:${n}}
+    else
+        typeset warNameResult=`echo "${pkgfile}" | awk -F"/" '{print $NF}'`
+    fi  
+    echo ${warNameResult}
+} 
+
+# 功能：返回值是个数组 || get local ip address  
+# 详细：详情见下面命令
+# 输入参数：1个 Ip
+# 返回值：正常 0 不正常 1
+# 注：函数光华所写
+
+getLocalIp(){
+    typeset func=getLocalIp
+    log_echo "info" "Enter ${func} with successed."
+    typeset localIP=`/sbin/ifconfig | grep "inet addr:" | grep -vE "127.0.0.1|192.168\..*|169.254\..*" | awk '{print $2}' | awk -F':' '{print $2}'`
+    #typeset localIP=`/sbin/ifconfig | grep "inet addr:" | grep -vE "127.0.0.1|169.254\..*" | awk '{print $2}' | awk -F':' '{print $2}'`
+    if [ -z "${localIP}" ];then
+        log_echo "error" "${func}" "Get localIP address failed."
+        return 1
+    fi
+    RETURN[0]="${localIP}"
+    log_echo "info" "Exit func ${func} with successed."
+    return 0
+}
+
+# 功能： 判断url是否可以访问 || asert url can open
+# 详细： 使用curl方式访问是否有返回结果 并设置超时时间 5秒
+# 输入参数：1个 url地址
+# 返回值：0 正常 不正常 1 有错误 2
+# 注：函数光华所写
+ 
+canOpenUrl(){
+    typeset func="canOpenUrl"
+    typeset URL="$1"
+
+    which curl 1>/dev/null 2>&1
+    if [ $? -ne 0 ];then
+        log_echo "error" "$func" "Can not find curl command."
+        return 1
+    fi
+
+    typeset retCode=`curl -o /dev/null -s -w "%{http_code}" --max-time 5 "${URL}"`
+    if [  "${retCode}" = "000" -o "${retCode}" -ge "400" ];then
+        return 2
+    fi
+    #log_echo "info" "${func}" "Exit func ${func} with successed."
+    return 0
+}
+
+# 功能：得到对应用户的java 进程ID 
+# 详细：根据用户名和应用路径通过ps -ef 方式判断是否能得到进程 如果用户名大于8个字符 通过/etc/passwd文件得到id号再匹配  （此处不明白）
+# 输入参数：2个 用户名和应用目录
+# 返回值：正常 0 和 RETURN[0] 变量  不正常情况下变量 RETURN[0] 为空值
+# 注：函数光华所写
+
+getUserJavaProcessesId(){
+    typeset func=getUserJavaProcessesId
+    if [ $# -ne 2 ];then
+        log_echo "error" "${func}" "Parameter error usage : ${func}  username  tomcatdir"
+        log_echo "error" "${func}" "Like: ${func}  demouser  /home/demouser/tomcat"
+        return 1
+    fi
+    #log_echo "info" "$func" "Enter $func with successed."
+    typeset theuser="$1"
+    typeset tomcatdir="$2"
+    typeset characternum=${#theuser}
+    typeset pids=""
+    RETURN[0]=""
+    if [ ${characternum} -gt 8 ];then
+        typeset uid=`grep "^${theuser}:"  /etc/passwd | awk -F':' '{print $3}'`
+        pids=`ps -ef | grep ^${uid} | grep java | grep "${tomcatdir}" | awk '{print $2}'`
+    else
+        pids=`ps -ef | grep ^${theuser} | grep java | grep "${tomcatdir}"  | awk '{print $2}'`
+    fi
+    RETURN[0]="${pids}"
+    log_echo "info" "$func" "Exit $func with successed."
+    return 0  
+}
+
+# 功能：检查tomcat应用启动日志是否成功
+# 详细：根据启动日志文件和检查最长时间和检查间隔时间，检查是否含有关键字 INFO: Server startup in
+# 输入参数：3个 输入日志文件 最长启动时间 检查间隔时间
+# 返回值：正常 0 不正常 1
+# 注：函数光华所写 稍作修改
+
+checkTomcatLogStarted(){
+    typeset func=checkTomcatLogStarted
+    if [ $# -ne 3 ];then
+        log_echo "error" "${func}" "Parameter error usage : ${func} logfile  execTimeOut  sleeptime"
+        return 1
+    fi
+    typeset logfile="$1"
+    typeset execTimeOut="$2"
+    typeset sleeptime="$3"
+
+    typeset current_line_num=0
+    typeset increase_num=0
+    typeset currentTime=0
+    typeset expenseTime=0
+    typeset beginTime=0
+    typeset nowtime=0
+    typeset successed_str="INFO: Server startup in"
+    typeset ret_=0
+    log_echo "info" "$func" "Enter check tomcat log : [  ${logfile}  ] loop ..."
+    beginTime=`date +%s`
+    while [ TRUE ] ;do
+        org_line_num=`wc -l ${logfile} | awk '{print $1}'`   # 此处有修改 光华 的代码  增加  | awk '{print $1}'
+        log_echo "info" "[[ ${sleeptime} ]] seconds after testing whether they contain [[ ${successed_str} ]] key word, if you have is successful, otherwise failure."
+        sleep ${sleeptime}
+        current_line_num=`wc -l ${logfile} | awk '{print $1}' `   # 此处有修改 光华 的代码  增加  | awk '{print $1}'
+        # increase_num=`expr $current_line_num - $org_line_num`
+        # ret_=`tail -${increase_num} ${logfile} | grep -c "^${successed_str}"`
+        ret_=`sed -n ''"${org_line_num}"','"${current_line_num}"'p' ${logfile} | grep -c "^${successed_str}"`
+        if [ ${ret_} -gt 0 ];then
+            nowtime=`date +%s`
+            log_echo "info" "$func" "Start successed ,catched log file: [  ${logfile}   ] started str:[ ${successed_str}   ] spend : [  `expr ${nowtime} - ${beginTime}`  ] s started."
+            break
+        fi
+        currentTime=`date +%s`
+        expenseTime=`expr ${currentTime} - ${beginTime}`
+        if [ "${expenseTime}" -gt "${execTimeOut}" ];then
+            log_echo "error" "$func" "Time out ..set time is ${execTimeOut} but expense time is ${expenseTime} "
+            log_echo "error" "$func" "Please check log file:[  ${logfile}  ]"
+            log_echo "error" "$func" "Use command:[  tail -100f  ${logfile}    ] to show more error log ..."            
+            return 1
+        fi
+        echo "netxt..........."
+    done
+    log_echo "info" "Exit ${func} with successed."
+    return 0
+}
+

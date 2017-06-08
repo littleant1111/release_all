@@ -1,0 +1,236 @@
+@CHARSET "UTF-8";
+#main {
+    width: 1024px;
+    min-height: 600px;
+    /*background: #ccc;*/
+    margin: 56px auto 0 auto;
+    border: 1px solid #ccc;
+    box-shadow: 2px 3px 4px #888888;
+    position: relative;
+}
+#main .banner {
+    height: 35px;
+    border-bottom: 1px solid #666;
+}
+#main .banner .left {
+    float: left;
+    width: 200px;
+    height: 35px;
+    line-height: 35px;
+    text-align: left;
+    font-size: 18px;
+    font-weight: normal;
+}
+#main .banner .right {
+    float: right;
+}
+#main .banner .right ul{
+    /*background: #dad55e;*/
+}
+#main .banner .right li{
+    display: inline-block;
+    /*margin: 0 10px;*/
+}
+#main .banner .right li span {
+    font-size: 15px;
+    /*color: #666;*/
+    margin-right: 10px;
+}
+#main .banner .right li a{
+    display: inline-block;
+    height: 42px;
+    line-height: 42px;
+    text-align: center;
+    font-size: 15px;
+    text-decoration: none;
+    padding: 0 10px;
+    /*color: #666;*/
+}
+#main .banner .right li a:hover {
+    text-decoration: underline;
+    color: #046;
+}
+#main .stage {
+    height: 42px;
+}
+#main .stage .title {
+    display: inline-block;
+    font-size: 16px;
+    margin: 0 0 0 16px;
+    /*font-weight: bold;*/
+}
+#main .stage ul {
+    display: inline-block;
+    margin: 20px 0 0 16px;
+}
+#main .stage li {
+    display: inline-block;
+    padding: 0 10px;
+}
+
+#main .hidden {
+    display: none;
+}
+#main .pro_main {
+    border :1px dashed #666;
+    padding: 10px 10px 10px 0px ;
+    margin: 10px 10px;
+}
+#main .pro_main .env  {
+    margin: 10px 0 0 16px;
+}
+#main  .pro_main .env .title {
+    /*margin: 0 0 0 16px;*/
+    /*font-weight: bold;*/
+    /*color: #555;*/
+}
+#main  .pro_main .env ul {
+    margin: 20px 0 0 16px;
+}
+#main  .pro_main .env li {
+    display: inline-block;
+    padding: 0 10px;
+}
+
+#main .pro_main  .project {
+    margin: 20px 0 0 16px;
+}
+#main .pro_main  .project .pname {
+    font-size: 16px;
+    /*font-weight: bold;*/
+    /*color: #555;*/
+}
+#main .pro_main  .project .input {
+    padding: 5px;
+    /*color: #666;*/
+    width: 250px;
+    height: 20px;
+    margin: 0 0 0 20px;
+}
+#main .pro_main  .project .select {
+    padding: 5px;
+    color: #666;
+    width: 260px;
+    height: 35px;
+    margin: 0 0 0 20px;
+}
+#main  .pro_main .apps {
+    margin: 10px 0 0 0px;
+}
+#main  .pro_main .apps .title {
+    margin: 0px 0 0 16px;
+}
+#main  .pro_main .apps .all {
+    margin: 20px 0 0 40px;
+    font-size: 14px;
+}
+#main  .pro_main .apps .select_app {
+    /*background: #ccc;*/
+    width: 960px;
+    display: inline-block;
+    margin: 15px 0 0 30px;
+    border: 1px solid #ccc;
+}
+#main  .pro_main .apps .select_app label {
+    display: inline-block;
+    padding: 10px 10px;
+}
+#main .btns {
+    margin: 40px 0 0 0 ;
+    height: 80px;
+    border-top: 1px solid #ccc;
+    position: relative;
+}
+#main .btns ul {
+    padding: 5px;
+    position: absolute;
+    bottom:10px;
+    right: 20px;
+}
+#main .btns li {
+    display: inline-block;
+}
+#main .btns input {
+    padding: 8px 8px;
+    background: gold;
+    border-radius: 4px;
+    width: 200px;
+}
+
+#comfirm {
+    font-size: 16px;
+}
+#comfirm .project {
+    width: 100%;
+    height: 30px;
+    line-height: 30px;
+    border-bottom: 1px solid #ccc;
+}
+#comfirm .project:hover {
+    background: #ddd;
+}
+/*#comfirm .project p {*/
+    /*border-bottom: 1px solid #ccc;*/
+/*}*/
+#comfirm  .content {
+    color: orange;
+}
+
+#comfirm .project_info ul {
+    border-bottom: 1px solid #ddd;
+    line-height: 30px;
+}
+#comfirm .project_info ul:hover {
+    background: #ddd;
+
+}
+#comfirm .project_info li {
+    display: inline-block;
+}
+#comfirm .app {}
+#comfirm .app ul {
+    width: 100%;
+    height: 35px;
+    /*border-bottom: 1px solid #ccc;*/
+}
+#comfirm .app li {
+
+    display: inline-block;
+}
+
+
+
+#loadding {
+    text-align: center;
+}
+
+#error {}
+
+#error2 {
+    height:35px !important;
+    line-height:35px !important;
+    text-align:center !important;
+    font-size:14px !important;
+    color:red !important;
+    background: url('../img/error.png') no-repeat left center;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

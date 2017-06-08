@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block othercss %}
+<link href="{% static 'assets/toastr-2.1.2/toastr.min.css' %}" rel="stylesheet">
+<link href="{% static 'css/add_app.css' %}" rel="stylesheet">
+
+{% endblock %}
+
+
+{% block title %}<title> 发布系统｜添加应用 </title>{% endblock %}
+
+{% block main %}
+<div class="main">
+    <div class="refresh"><input class="input-admin" type="button" name="refresh" value="刷新"></div>
+    <div class="clear"></div>
+    <form id="add_app" >
+        <div class="form-group ">
+            <label>应用名：</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <input id="name" type="text" class="form-control" name="name" value="{{data.data.0.1}}">
+        </div>
+        <div class="form-group ">
+            <label>应用安装用户：</label>
+            <input id="user" type="text" class="form-control" name="user" value="{{data.data.0.2}}">
+        </div>
+        <div class="form-group ">
+            <label>应用包名：</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <input id="pkgname" type="text" class="form-control" name="pkgname" value="{{data.data.0.3}}">
+        </div>
+        <div class="form-group ">
+            <label>应用安装目录：</label>
+            <input id="dir" type="text" class="form-control" name="dir" value="{{data.data.0.4}}">
+        </div>
+        <div class="form-group ">
+            <label>应用端口：</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <input id="port" type="text" class="form-control" name="port" value="{{data.data.0.7}}">
+        </div>
+        <div class="form-group ">
+            <label>启动顺序：</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <input id="seqence" type="text" class="form-control" name="seqence" value="{{data.data.0.8}}">
+        </div>
+        <br><label>所属项目：</label><br>
+
+{% for eachdata in data.project %}
+    {% if forloop.counter|divisibleby:5 %}
+        <br>
+        <label class="mr10">
+            <input type="radio" name="project_id"  class="bk-top5" value="{{eachdata.0}}"  {% ifequal eachdata.0 data.data.0.6  %}checked="checked"{% endifequal %} >
+            <input type="hidden" name="project_code"  class="bk-top5" value="{{eachdata.1}}">
+            <span class="bk-lh30">{{eachdata.2}}</span>
+        </label>
+    {% else %}
+        <label class="mr10">
+            <input type="radio" name="project_id"  class="bk-top5" value="{{eachdata.0}}" {% ifequal eachdata.0 data.data.0.6  %}checked="checked"{% endifequal %}>
+            <input type="hidden" name="project_code"  class="bk-top5" value="{{eachdata.1}}">
+            <span class="bk-lh30">{{eachdata.2}}</span>
+        </label>
+    {% endif %}
+
+{% endfor %}
+
+        <br><br><label>选择对应机器：</label><br>
+
+{% for eachdata2 in data.machine %}
+    {% if forloop.counter|divisibleby:5 %}
+        <br>
+        <label class="mr10">
+            <input type="radio" name="machine_id"  class="bk-top5" value="{{eachdata2.0}}" {% ifequal eachdata2.0 data.data.0.9  %}checked="checked"{% endifequal %}>
+            <input type="hidden" name="name"  class="bk-top5" value="{{eachdata2.1}}">
+            <span class="bk-lh30">{{eachdata2.2}}({{eachdata2.3}})</span>
+        </label>
+    {% else %}
+        <label class="mr10">
+            <input type="radio" name="machine_id"  class="bk-top5" value="{{eachdata2.0}}" {% ifequal eachdata2.0 data.data.0.9  %}checked="checked"{% endifequal %}>
+            <input type="hidden" name="name"  class="bk-top5" value="{{eachdata2.1}}">
+            <span class="bk-lh30">{{eachdata2.2}}({{eachdata2.3}})</span>
+        </label>
+    {% endif %}
+{% endfor %}
+
+        <hr>
+        <div class="form-group clearfix">
+            <div class="col-sm-9 col-sm-offset-3">
+                <input id="id" type="hidden" value="{{data.data.0.0}}">
+                <input id="submit" type="submit" name="submit" class="king-btn mr10  king-success" value="提交">
+            </div>
+        </div>
+    </form> <!-- end of 添加应用 -->
+</div>
+<script src="{% static 'js/edit_app.js' %}"></script>
+<script src="{% static 'assets/toastr-2.1.2/toastr.min.js' %}"></script>
+<script src="https://magicbox.bkclouds.cc/static_api/v3/assets/topbar-1.0/topbar.js"></script>
+{% endblock %}
+

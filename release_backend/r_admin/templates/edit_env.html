@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block othercss %}
+<link href="{% static 'assets/toastr-2.1.2/toastr.min.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block title %}<title> 配置后台 ｜ 编辑环境 </title>{% endblock %}
+
+{% block main %}
+<div class="main">
+    <form id="add_env" >
+        <div class="form-group ">
+            <label>环境名称：</label>
+            <input id="name" type="text" class="form-control" name="name" value="{{data.0.1}}">
+        </div>
+        <label>环境所属发布阶段：</label>
+        <div class="radio pt0">
+            <label class="mr10">
+                <input type="radio" name="env"  class="bk-top5" value="1" {% ifequal data.0.3 1  %}checked="checked"{% endifequal %}>
+                <span class="bk-lh30">dev</span>
+            </label>
+            <label class="mr10">
+                <input type="radio"  name="env"  class="bk-top5" value="2" {% ifequal data.0.3 2  %}checked="checked"{% endifequal %}>
+                <span class="bk-lh30">sit</span>
+            </label>
+            <label class="mr10">
+                <input type="radio" name="env"  class="bk-top5" value="3" {% ifequal data.0.3 3  %}checked="checked"{% endifequal %}>
+                <span class="bk-lh30">uat</span>
+            </label>
+            <label class="mr10">
+                <input type="radio"name="env"  class="bk-top5" value="4" {% ifequal data.0.3 4  %}checked="checked"{% endifequal %}>
+                <span class="bk-lh30">pre</span>
+            </label>
+            <label class="mr10">
+                <input type="radio" name="env"  class="bk-top5" value="5" {% ifequal data.0.3 5  %}checked="checked"{% endifequal %}>
+                <span class="bk-lh30">prd</span>
+            </label>
+        </div>
+        <hr>
+        <ol class="my_errors"></ol>
+        <div class="form-group clearfix">
+            <div class="col-sm-9 col-sm-offset-3">
+                <input id="id" type="hidden" value="{{data.0.0}}">
+                <input id="submit" type="submit" class="king-btn mr10  king-success" value="提交">
+            </div>
+        </div>
+    </form> <!-- end of 发布阶段 -->
+
+</div>
+<script src="{% static 'js/edit_env.js' %}"></script>
+<script src="{% static 'assets/toastr-2.1.2/toastr.min.js' %}"></script>
+
+{% endblock %}

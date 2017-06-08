@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block othercss %}
+    <link rel="stylesheet" href="{% static 'css/basic.css' %}">
+    <link rel="stylesheet" href="{% static 'css/index.css' %}">
+{% endblock %}
+
+{% block title %}<title> 发布系统｜首页 </title>{% endblock %}
+
+{% block nav %}
+    <div class="nav">
+        <ul>
+            <li><a href="{% url 'release:index' %}" class="selected" >首页</a></li>
+            <li><a href="{% url 'release:release' %}"  target="_blank">开始发布</a></li>
+            <li><a href="{% url 'release:history' %}">发布历史</a></li>
+            <li><a href="{% url 'release:bsdetail' %}">发布地图</a></li>
+            <li><a href="http://10.40.1.38:9000/r_admin/index/" target="_blank">配置中心</a></li>
+        </ul>
+    </div>
+{% endblock %}
+
+{% block main %}
+<div id="main">
+    <div class="intro">
+        <p>集成发布系统是一套对Pro/E产品设计结果的动态集成发布进行了研究，并开发了一套Pro/E产品设计结果动态集成发布系统本文首先提出了在产品设计完成时对产品信息集成的需要，并指出了传统交互手册的不足和局限。接着提出了Pro/E产品设计结果动态集成发布系统，并详细介绍了系统的总体设计方案。根据系统的设计方案，对系统构建的关键技术——目录结构树的实现、页面组管理与页面编辑、搜索与索引功能和三维模型技术进行了研究。</p>
+    </div>
+    <div class="inter">
+        <ul>
+            <li><a href="{% url 'release:release' %}" target="_blank">开始发布系统</a></li>
+            <li><a href="{% url 'release:history' %}">查看历史发布任务</a></li>
+            <li><a href="http://10.40.1.38:9000/r_admin/index/" target="_blank">配置中心</a></li>
+        </ul>
+    </div>
+</div>
+<div id="footer">
+    <div class="content_left">联系我们: guanghua.fan@bqjr.cn&nbsp; &copy佰任金融 版权所有</div>
+</div>
+
+<script src="{% static 'js/index.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,55 @@
+#!/usr/bin/expect
+
+###############   scp copy file or files from local host to  remote host ######
+set timeout 120
+set remoteHostIP        [lindex $argv 0]
+set username            [lindex $argv 1]
+set port                [lindex $argv 2]
+set password            [lindex $argv 3]
+set dir_file            [lindex $argv 4]
+set dir                 [lindex $argv 5]
+set isFromLocal         [lindex $argv 6]
+set ERR_TIMEOUT 3
+set PARA_ERROR 4
+
+if {$isFromLocal == ""} {
+    set isFromLocal "YES"
+} 
+###  command interact   ####
+if {$isFromLocal == "YES"} {
+spawn bash -c "rsync -avrzu -e 'ssh -p $port' --delete ${dir_file}  ${username}@${remoteHostIP}:${dir}"
+} elseif {$isFromLocal == "NO"} {
+spawn bash -c "rsync -avrzu -e 'ssh -p $port' --delete --port=$port ${username}@${remoteHostIP}:${dir_file} ${dir}"
+} else {
+    exit $PARA_ERROR
+}    
+expect  {
+    "yes/no"
+    {
+        send "yes\r"
+        expect {
+            "password:" 
+            { 
+                send "$password\r"
+            }
+        }
+    }
+    "password:" 
+    {
+        send "$password\r"
+    }
+    "100%" 
+    {
+        send "exit\r"
+    }
+    "total size"
+    {
+       exit 0 
+    }
+    timeout {
+        exit $ERR_TIMEOUT
+    }
+}
+
+#send "exit\r"
+expect eof

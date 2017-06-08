@@ -1,0 +1,54 @@
+### pub.lib   ############
+
+
+####  ÈÕÖ¾Êä³ö  ########
+log_echo()
+{
+    echo "[ `date "+%Y-%m-%d %H:%M:%S"` ]" $* | tee -a ${LOG_FILE}
+}
+
+#####  unzip war to dir #######
+unzipWar()
+{
+    typeset func=unzipWar
+    if [ $# -ne 2 ];then
+        log_echo "error" "${func}" "Parameter error usage : ${func} xx.war  unzipDir"
+        log_echo "error" "${func}" "You can use like this:${func} ceshi1.war ceshi1"
+        return 1
+    fi    
+    typeset pkgWarFile="$1"
+    typeset unzipDir="$2"    
+    
+    if [ ! -f "${pkgWarFile}" -o -d "${unzipDir}" ];then
+        log_echo "error" "${func}" "You must be make sure file:[ ${pkgWarFile}  ] exists, and dir:[  ${unzipDir}  ] not exists.please check"
+        return 1
+    fi
+    #typeset pkgWarDir=`dirname "${pkgWarFile}"`
+    unzip -d ${unzipDir} ${pkgWarFile} >/dev/null 2>&1
+    if [ $? -ne 0 ];then
+        log_echo "error" "${func}" "Unzip file failed,CMD=[  unzip -d ${unzipDir} ${pkgWarFile}  ]"
+        return 1
+    fi
+    log_echo "info" "Exit func ${func} with successed."
+    return 0    
+}
+
+############ check directorys exists  ##########
+checkDirsExists()
+{
+    typeset func=checkDirsExists
+    if [ $# -lt 0 ];then
+        log_echo "error" "${func}" "Parameter error ${func} directory."    
+        return 1
+    fi
+    typeset checkdirs="$*"
+    typeset eachdir=""
+    for eachdir in `echo "${checkdirs}"`;do
+        if [ ! -d "${eachdir}" ];then
+            log_echo "error" "${func}" "Directory :[ ${eachdir} ] is not exists,please check."    
+            return 1
+        fi
+    done
+    #log_echo "info" "${func}" "Exit func ${func} with succesed."    
+    return 0 
+}

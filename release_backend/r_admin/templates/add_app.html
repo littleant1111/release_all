@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block othercss %}
+<link href="{% static 'assets/toastr-2.1.2/toastr.min.css' %}" rel="stylesheet">
+<link href="{% static 'css/add_app.css' %}" rel="stylesheet">
+
+{% endblock %}
+
+
+{% block title %}<title> 发布系统｜添加应用 </title>{% endblock %}
+
+{% block main %}
+<div class="main">
+    <div class="refresh"><input class="input-admin" type="button" name="refresh" value="刷新"></div>
+    <div class="clear"></div>
+    <form id="add_app" >
+        <div class="form-group ">
+            <label>应用名：</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <input id="name" type="text" class="form-control" name="name" placeholder="填写 应用名，如：beehive,LoginSYS,Dubbo,fileupload">
+        </div>
+        <div class="form-group ">
+            <label>应用安装用户：</label>
+            <input type="text" class="form-control" name="user" placeholder="填写 应用安装用户，如：beehive/weblogic">
+        </div>
+        <div class="form-group ">
+            <label>应用包名：</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <input id="pkgname" type="text" class="form-control" name="pkgname" placeholder="填写 应用包名，如：beehive.war,LoginSYS.war">
+        </div>
+        <div class="form-group ">
+            <label>应用安装目录：</label>
+            <input type="text" class="form-control" name="dir" placeholder="填写 应用安装目录，如：/usr/local/tomcat8080/">
+        </div>
+        <div class="form-group ">
+            <label>应用端口：</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <input type="text" class="form-control" name="port" placeholder="填写 应用端口，如：8080">
+        </div>
+        <div class="form-group ">
+            <label>启动顺序：</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <input type="text" class="form-control" name="seqence" placeholder="填写 启动顺序，填写一个数字，如：0">
+        </div>
+        <br><label>所属项目：</label><br>
+
+{% for eachdata in data.project %}
+    {% if forloop.counter|divisibleby:5 %}
+        <br>
+        <label class="mr10">
+            <input type="radio" name="project_id"  class="bk-top5" value="{{eachdata.0}}">
+            <input type="hidden" name="project_code"  class="bk-top5" value="{{eachdata.1}}">
+            <span class="bk-lh30">{{eachdata.2}}</span>
+        </label>
+    {% else %}
+        <label class="mr10">
+            <input type="radio" name="project_id"  class="bk-top5" value="{{eachdata.0}}">
+            <input type="hidden" name="project_code"  class="bk-top5" value="{{eachdata.1}}">
+            <span class="bk-lh30">{{eachdata.2}}</span>
+        </label>
+    {% endif %}
+
+{% endfor %}
+
+        <br><br><label>选择对应机器：</label><br>
+
+{% for eachdata2 in data.machine %}
+    {% if forloop.counter|divisibleby:5 %}
+        <br>
+        <label class="mr10">
+            <input type="radio" name="machine_id"  class="bk-top5" value="{{eachdata2.0}}">
+            <input type="hidden" name="name"  class="bk-top5" value="{{eachdata2.1}}">
+            <span class="bk-lh30">{{eachdata2.2}}({{eachdata2.3}})</span>
+        </label>
+    {% else %}
+        <label class="mr10">
+            <input type="radio" name="machine_id"  class="bk-top5" value="{{eachdata2.0}}">
+            <input type="hidden" name="name"  class="bk-top5" value="{{eachdata2.1}}">
+            <span class="bk-lh30">{{eachdata2.2}}({{eachdata2.3}})</span>
+        </label>
+    {% endif %}
+{% endfor %}
+
+        <hr>
+        <div class="form-group clearfix">
+            <div class="col-sm-9 col-sm-offset-3">
+                <input id="submit" type="submit" name="submit" class="king-btn mr10  king-success" value="提交">
+            </div>
+        </div>
+    </form> <!-- end of 添加应用 -->
+</div>
+<script src="{% static 'js/add_app.js' %}"></script>
+<script src="{% static 'assets/toastr-2.1.2/toastr.min.js' %}"></script>
+<script src="https://magicbox.bkclouds.cc/static_api/v3/assets/topbar-1.0/topbar.js"></script>
+{% endblock %}
+

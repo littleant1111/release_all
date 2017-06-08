@@ -1,0 +1,23 @@
+
+
+
+.main {
+    padding: 20px 20px 0 20px;
+}
+
+
+.form-control {
+    width: 500px !important;
+    margin: 5px 0 5px 0 !important;
+
+}
+.succ {
+    background : url(../img/ok.png) no-repeat center right;
+}
+.my_error {
+    background : url(../img/error.png) no-repeat center right;
+}
+.my_errors {
+    margin:20px 0 10px 20px !important;
+    color:red !important;
+}

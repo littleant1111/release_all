@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block othercss %}
+<link href="{% static 'assets/toastr-2.1.2/toastr.min.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block title %}<title> 配置后台 ｜ 添加机器 </title>{% endblock %}
+
+{% block main %}
+<div class="main">
+    <form id="add-machine"  class="main-center" >
+        <div class="form-group ">
+            <label>机器名称：</label>
+            <input id="name" type="text" class="form-control" name="name" placeholder="填写用户标识名称，如10.1.1.100，可以填写为100">
+        </div>
+        <div class="form-group ">
+            <label>主机名称：</label>
+            <input id="host" type="text" class="form-control" name="host" placeholder="填写主机名称">
+        </div>
+        <div class="form-group ">
+            <label>IP地址：</label>&nbsp;&nbsp;&nbsp;&nbsp;
+            <input id="ip" type="text" class="form-control" name="ip" placeholder="填写IP地址">
+        </div>
+        <div class="radio pt0" id="vm">
+            <label class="mr10">
+                <input type="radio" name="vm"  class="bk-top5" value="0">
+                <span class="bk-lh30">非虚拟机</span>
+            </label>
+            <label class="mr10">
+                <input type="radio" name="vm" class="bk-top5" value="1">
+                <span class="bk-lh30">虚拟机</span>
+            </label>
+        </div>
+        <div class="form-group ">
+            <label>CPU信息：</label>
+            <input id="cpu" type="text" class="form-control" name="cpu" placeholder="填写CPU信息，如：8核">
+        </div>
+        <div class="form-group ">
+            <label>内存信息：</label>
+            <input id="memory" type="text" class="form-control" name="memory" placeholder="填写内存信息，如：8G">
+        </div>
+        <label>机器所属环境：</label>
+        <div class="radio pt0 env" id="env">
+            <label class="mr10">
+                <input type="radio" name="env"  class="bk-top5" value="4">
+                <span class="bk-lh30">sit4</span>
+            </label>
+            <label class="mr10">
+                <input type="radio" name="env"  class="bk-top5" value="5">
+                <span class="bk-lh30">UAT-B</span>
+            </label>
+        </div><!-- 机器所属环境 -->
+        <hr>
+        <ol class="my_errors"></ol>
+        <div class="form-group clearfix">
+            <div class="col-sm-9 col-sm-offset-3">
+                <input id="submit" name="submit" type="submit" class="king-btn mr10  king-success"  value="提交" >
+            </div>
+        </div>
+    </form> <!-- end add-machine -->
+</div>
+<script src="{% static 'js/add_machine.js' %}"></script>
+<script src="{% static 'assets/toastr-2.1.2/toastr.min.js' %}"></script>
+
+{% endblock %}
+
+

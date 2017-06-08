@@ -1,0 +1,136 @@
+@CHARSET "UTF-8";
+
+
+#main {
+    width: 1024px;
+    min-height: 600px;
+    /*background: #ccc;*/
+    margin: 56px auto 0 auto;
+    border: 1px solid #ccc;
+    box-shadow: 2px 3px 4px #888888;
+    position: relative;
+}
+#main .banner {
+    height: 35px;
+    border-bottom: 1px solid #666;
+}
+#main .banner .left {
+    float: left;
+    width: 200px;
+    height: 35px;
+    line-height: 35px;
+    text-align: left;
+    font-size: 18px;
+    font-weight: normal;
+}
+#main .banner .right {
+    float: right;
+}
+#main .banner .right ul{
+    /*background: #dad55e;*/
+}
+#main .banner .right li{
+    display: inline-block;
+    /*margin: 0 10px;*/
+}
+#main .banner .right li span {
+    font-size: 15px;
+    /*color: #666;*/
+    margin-right: 10px;
+}
+#main .banner .right li a{
+    display: inline-block;
+    height: 42px;
+    line-height: 42px;
+    text-align: center;
+    font-size: 15px;
+    text-decoration: none;
+    padding: 0 10px;
+    /*color: #666;*/
+}
+#main .banner .right li a:hover {
+    text-decoration: underline;
+    color: #046;
+}
+
+#main .search {
+    /*background: #dad55e;*/
+    margin: 20px 0 0 0;
+    float: right;
+    height: 42px;
+    line-height: 42px;
+}
+#main .search .search_input {
+    width: 250px;
+    height: 30px;
+    /*padding: 5px;*/
+    color: #666;
+    margin: 0 20px 0 0;
+    text-indent: 4px;
+    letter-spacing: 1px;
+    background: #eee;
+}
+#main .search .search_btn {
+    width: 120px;
+    height: 35px;
+    /*padding: 5px;*/
+    background: gold;
+    border-radius: 4px;
+    cursor: pointer;
+}
+#main .search .search_btn:hover {
+    background: #dad55e;
+}
+#main .table {
+    width: 100%;
+    font-size: 12px;
+    clear: both;
+    margin: 80px 0 0 0;
+}
+#main .table table {
+    width: 100%;
+    border: 1px solid #666;
+    border-collapse: collapse;
+    text-align: center;
+}
+#main .table table tr {
+    height: 42px;
+    line-height: 42px;
+    text-align: center;
+}
+#main .table table tr:hover {
+    background: #eee;
+    /*text-align: center;*/
+}
+#main .table table th {
+    border: 1px solid #666;
+}
+#main .table table td {
+    border: 1px solid #666;
+    height: 50px;
+    line-height: 50px;
+    text-align: left;
+}
+#main .table table .actions {
+    /*display: inline-block;*/
+    width: 120px;
+}
+#main .table table .actions input {
+    display: inline-block;
+    background: gold;
+    border-radius: 2px;
+}
+#main .table table .actions input:hover {
+    background: #dad55e;
+    cursor: pointer;
+}
+
+
+
+
+
+
+
+
+
+

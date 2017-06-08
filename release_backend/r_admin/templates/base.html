@@ -1,0 +1,64 @@
+{% load staticfiles %}
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+
+    <!--  logo    -->
+    <link rel="icon" href="{% static 'img/logo.jpg' %}" type="image/x-icon">
+    <link rel="shortcut icon" href="{% static 'img/logo.jpg' %}" type="image/x-icon">
+
+    <!-- Bootstrap css -->
+    <link href="{% static 'assets/bootstrap-3.3.4/css/bootstrap.min.css' %}" rel="stylesheet">
+
+    <!-- kendo ui css -->
+    <link href="{% static 'assets/kendoui-2015.2.624/styles/kendo.common.min.css' %}" rel="stylesheet">
+    <link href="{% static 'assets/kendoui-2015.2.624/styles/kendo.default.min.css' %}" rel="stylesheet">
+
+    <!-- font-awesome -->
+    <link href="{% static 'assets/fontawesome/css/font-awesome.css' %}" rel="stylesheet">
+
+    <!--蓝鲸提供的公用样式库 -->
+    <link href="{% static 'assets/bk/css/bk.css' %}" rel="stylesheet">
+    <link href="{% static 'assets/bk/css/bk_pack.css' %}" rel="stylesheet">
+    <link href="{% static 'css/basic.css' %}" rel="stylesheet">
+    <link href="{% static 'assets/artDialog-6.0.4/css/ui-dialog.css' %}" rel="stylesheet">
+
+    <!--<script src="https://magicbox.bkclouds.cc/static_api/v3/assets/js/jquery-1.10.2.min.js"></script>-->
+    <script src="{% static 'assets/js/jquery-1.10.2.min.js' %}"></script>
+    <script src="{% static 'assets/artDialog-6.0.4/dist/dialog-min.js' %}"></script>
+
+    <!-- 如果要使用Bootstrap的js插件，必须先调入jQuery -->
+
+    <script src="{% static 'assets/js/jquery.validate.js' %}"></script>
+    <!--<script src="http://www.jq22.com/jquery/jquery-ui-1.11.0.js"></script>-->
+
+    <!-- validate   -->
+    <!--<script src="http://static.runoob.com/assets/jquery-validation-1.14.0/dist/jquery.validate.min.js">-->
+
+    <!-- 包括所有bootstrap的js插件或者可以根据需要使用的js插件调用　-->
+    <script src="{% static 'assets/bootstrap-3.3.4/js/bootstrap.min.js' %}"></script>
+    <!-- 包括所有kendoui的js插件或者可以根据需要使用的js插件调用　-->
+    <script src="{% static 'assets/kendoui-2015.2.624/js/kendo.all.min.js' %}"></script>
+    <!-- 数据埋点统计 -->
+    <script src="{% static 'assets/js/analysis.js' %}"></script>
+
+    {% block othercss %}{% endblock %}
+    {% block title %}{% endblock %}
+
+</head>
+<body  class="bg-white" data-bg-color="bg-white">
+
+{% if user.is_authenticated  %}
+
+    {% block main %}{% endblock %}
+
+{% endif %}
+
+{% block content %}{% endblock %}
+{% block footer %}{% endblock %}
+{% block scripts %}{% endblock %}
+
+</body>
+</html>

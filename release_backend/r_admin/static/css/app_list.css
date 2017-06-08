@@ -1,0 +1,14 @@
+
+.refresh {
+    //height:35px;
+    //line-height:35px;
+    background:#ccc;
+}
+.refresh input {
+    float:right;
+    margin: 0 60px 0 0;
+
+}
+.clear {
+    clear:both;
+}

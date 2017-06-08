@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block othercss %}
+<link href="{% static 'assets/toastr-2.1.2/toastr.min.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block title %}<title> 配置后台 ｜ 编辑项目 </title>{% endblock %}
+
+{% block main %}
+<div class="main">
+    <form id="add_project" >
+        <div class="form-group ">
+            <label>项目编号：</label>
+            <input id="name" type="text" class="form-control" name="name" value="{{data.project.0.1}}">
+        </div>
+        <div class="form-group ">
+            <label>项目描述：</label>
+            <input id="remark" type="text" class="form-control" name="remark" value="{{data.project.0.2}}">
+        </div>
+        <label>项目所属环境：</label>
+        <div class="radio pt0 env" id="env">
+            {% for eachenv in data.env %}
+
+                <label class="mr10">
+                    <input type="checkbox" name="env"  class="bk-top5" value="{{eachenv.0}}" {% for eachproject in data.project %}{% ifequal eachenv.0  eachproject.4  %}checked="checked"{% endifequal %}{% endfor %} >
+                    &nbsp;<span class="bk-lh30">{{eachenv.1}}</span>
+                </label>
+
+            {% endfor %}
+
+        </div><!-- 机器所属环境 -->
+        <hr>
+        <ol class="my_errors"></ol>
+        <div class="form-group clearfix">
+            <div class="col-sm-9 col-sm-offset-3">
+                <input id="id" type="hidden"   value="{{data.project.0.0}}" >
+                <input id="submit" type="submit"  class="king-btn mr10  king-success" value="保存" >
+            </div>
+        </div>
+    </form> <!-- add project  -->
+
+</div>
+<script src="{% static 'js/edit_project.js' %}"></script>
+<script src="{% static 'assets/toastr-2.1.2/toastr.min.js' %}"></script>
+
+{% endblock %}

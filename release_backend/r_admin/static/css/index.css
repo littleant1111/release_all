@@ -1,0 +1,131 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+ul,ol {
+    list-style: none !important;
+}
+.king-layout1-sidebar {
+    margin: 15px 0 0 5px;
+    float: left !important;
+}
+.navbar-container {
+    width: 100%;
+    position: fixed !important;
+    top:0;
+    right: 0;
+    background: #049cdb !important;
+    z-index: 100 !important;
+}
+.logo {
+    border: none !important;
+    margin: 6px 0 0 48px !important;
+    /*background: green;*/
+}
+.logo a {
+    border: none !important;
+}
+
+/*.clear {*/
+    /*clear: both;*/
+/*}*/
+.king-content-wrap {
+    margin: 15px 0px 0 15px;
+    width: 81%;
+    min-height: 956px !important;
+    float: left;
+    background: #eee;
+    z-index: 99 !important;
+}
+.king-content-wrap .banner {
+    width: 100%;
+    height: 35px;
+    /*background: #049cdb;*/
+    border-bottom: 1px solid #ccc;
+}
+.king-content-wrap .banner ul{
+    margin: 0 35px 0 0 ;
+    float: right;
+}
+.king-content-wrap .banner ul li{
+    height: 35px;
+    line-height: 35px;
+    text-align: right;
+    display: inline-block;
+}
+.king-content-wrap .banner ul li a {
+    color: #555;
+    font-size: 14px;
+    text-decoration: none;
+}
+.king-content-wrap .banner ul li a:hover {
+    color: cornflowerblue;
+    text-decoration: underline;
+}
+
+
+.sub-menu li {
+    margin: 0;
+    padding: 0 !important;
+}
+.sub-menu li .selected {
+    background: #ccc !important;
+}
+.sub-menu li a {
+    height: 35px;
+    line-height: 35px;
+    text-indent: 30px;
+    display: block;
+    width: 100%;
+}
+.sub-menu li a:hover {
+    background: #ccc !important;
+}
+
+.form-content-main .main {
+    margin: 15px 10px 0 15px !important;
+}
+
+
+
+
+
+.clear {
+    clear: both;
+}
+
+.king-layout1-main .footer {
+    height: 22px;
+    line-height: 22px;
+    background: #000 !important;
+
+}
+.king-layout1-main .footer .content_left {
+    color: #fff;
+    font-weight: normal;
+    font-family: "Courier New", Courier, monospace;
+    margin: 0 auto;
+    height: 22px;
+    line-height: 22px;
+    font-size: 12px;
+    text-align: center !important;
+    width: 100%;
+    opacity: 0.5;
+}
+
+table {
+    background: #eee !important;
+}
+
+/* 自定义按钮样式*/
+.input-admin {
+    width: 45px;
+    height: 30px;
+    font-size: 14px;
+    color: #666;
+    /*border: 1px solid #34a263;*/
+}
+
+
+
+

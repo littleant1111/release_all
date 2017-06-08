@@ -1,0 +1,55 @@
+@CHARSET "UTF-8";
+
+
+#main {
+    width: 1024px;
+    min-height: 600px;
+    /*background: #ccc;*/
+    margin: 56px auto 0 auto;
+    border: 1px solid #ccc;
+    box-shadow: 2px 3px 4px #888888;
+    position: relative;
+}
+#main .banner {
+    height: 35px;
+    /*background: #049cdb;*/
+    border-bottom: 1px solid #666;
+}
+#main .banner .left {
+    float: left;
+    width: 200px;
+    height: 35px;
+    line-height: 35px;
+    text-align: left;
+    font-size: 18px;
+    font-weight: normal;
+}
+#main .banner .right {
+    float: right;
+}
+#main .banner .right ul{
+    /*background: #dad55e;*/
+}
+#main .banner .right li{
+    display: inline-block;
+    /*margin: 0 10px;*/
+}
+#main .banner .right li span {
+    font-size: 15px;
+    /*color: #666;*/
+    margin-right: 10px;
+}
+#main .banner .right li a{
+    display: inline-block;
+    height: 42px;
+    line-height: 42px;
+    text-align: center;
+    font-size: 15px;
+    text-decoration: none;
+    padding: 0 10px;
+    /*color: #666;*/
+}
+#main .banner .right li a:hover {
+    text-decoration: underline;
+    color: #046;
+}

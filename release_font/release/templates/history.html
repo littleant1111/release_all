@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block othercss %}
+    <link rel="stylesheet" href="{% static 'css/basic.css' %}">
+    <link rel="stylesheet" href="{% static 'css/history.css' %}">
+
+<link href="//cdn.bootcss.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
+<link href="{% static 'css/dataTables.bootstrap.css' %}" rel="stylesheet"/>
+<link href="{% static 'css/bk.css' %}" rel="stylesheet">
+
+{% endblock %}
+
+{% block title %}<title> 发布系统｜发布历史 </title>{% endblock %}
+
+{% block nav %}
+    <div class="nav">
+        <ul>
+            <li><a href="{% url 'release:index' %}" >首页</a></li>
+            <li><a href="{% url 'release:release' %}"  target="_blank">开始发布</a></li>
+            <li><a href="{% url 'release:history' %}"  class="selected" >发布历史</a></li>
+            <li><a href="{% url 'release:bsdetail' %}">发布地图</a></li>
+            <li><a href="http://10.40.1.38:9000/r_admin/index/" target="_blank">配置中心</a></li>
+        </ul>
+    </div>
+{% endblock %}
+
+{% block main %}
+<div class="king-block king-block-bordered">
+    <div class="king-block-header king-gray-light">
+        <h3 class="king-block-title">综合示例</h3>
+    </div>
+    <div class="king-block-content">
+
+        <table id="table2_demo4" class="table table-bordered table-striped" style="TABLE-LAYOUT:fixed;WORD-BREAK:break-all">
+            <thead>
+                <tr>
+                    <th>任务编号</th>
+                    <th>发布环境</th>
+                    <th>项目编码</th>
+                    <th>发布版本</th>
+                    <th>发布应用</th>
+                    <th>开始时间</th>
+                    <th>结束时间</th>
+                    <th>发布状态</th>
+                    <th>进入详情</th>
+
+                </tr>
+            </thead>
+
+        </table>
+    </div>
+</div>
+<script src="{% static 'js/jquery.dataTables.js' %}"></script>
+<script src="{% static 'js/dataTables.bootstrap.js' %}"></script>
+<script src="{% static 'js/history.js' %}"></script>
+
+{% endblock %}
+

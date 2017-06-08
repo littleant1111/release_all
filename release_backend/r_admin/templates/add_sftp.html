@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block othercss %}
+<link href="{% static 'assets/toastr-2.1.2/toastr.min.css' %}" rel="stylesheet">
+<link href="{% static 'css/add_sftp.css' %}" rel="stylesheet">
+
+{% endblock %}
+
+{% block title %}<title> 配置后台 ｜ 添加sftp信息 </title>{% endblock %}
+
+{% block main %}
+<div class="main">
+    <div class="refresh"><input class="input-admin" type="button" name="refresh" value="刷新"></div>
+    <div class="clear"></div>
+    <form id="add_sftp_config" >
+        <!--<div class="form-group ">-->
+            <!--<label>item：</label>-->
+            <!--<input type="text" class="form-control" name="item" placeholder="填写 对应的key:  sftp_host/sftp_user/sftp_pass/sftp_basedir/sftp_port">-->
+        <!--</div>-->
+        <label>请选择：</label><br>
+        <select class="select2_box" name="item" style="width:300px;height:35px;">
+            <option value="">--选择项目--</option>
+            <option value="sftp_host">sftp主机名或者IP</option>
+            <option value="sftp_user">sftp用户名</option>
+            <option value="sftp_pass">sftp密码</option>
+            <option value="sftp_basedir">sftp用户对应根目录</option>
+            <option value="sftp_port">sftp端口</option>
+        </select>
+        <br><br>
+        <div class="form-group ">
+            <label>填写值：</label>&nbsp;&nbsp;&nbsp;
+            <input type="text" class="form-control" name="value" placeholder="填写 对应key 的value值">
+        </div>
+        <div class="form-group ">
+            <label>描述信息：</label>
+            <input type="text" class="form-control" name="remark" placeholder="填写 对应说明信息">
+        </div>
+        <label>所属项目：</label><br>
+{% for eachdata in data.project %}
+    <label class="mr10">
+        <input type="radio" name="project_id"  class="bk-top5" value="{{eachdata.0}}">
+        <input type="hidden" name="project_code"  class="bk-top5" value="{{eachdata.1}}">
+        <span class="bk-lh30">{{eachdata.2}}</span>
+    </label>
+{% endfor %}
+
+        <br><label>所属环境：</label><br>
+{% for eachdata in data.env %}
+    <label class="mr10">
+        <input type="radio" name="env_id"  class="bk-top5" value="{{eachdata.0}}">
+        <input type="hidden" name="step_id"  class="bk-top5" value="{{eachdata.3}}">
+        <span class="bk-lh30">{{eachdata.1}}</span>
+    </label>
+{% endfor %}
+        <ol class="my_errors"></ol>
+        <div class="form-group clearfix">
+            <div class="col-sm-9 col-sm-offset-3">
+                <input id="submit" type="submit" class="king-btn mr10  king-success" value="提交" >
+            </div>
+        </div>
+    </form> <!-- end of add sftp config -->
+
+</div>
+<script src="{% static 'js/add_sftp.js' %}"></script>
+<script src="{% static 'assets/toastr-2.1.2/toastr.min.js' %}"></script>
+
+{% endblock %}

@@ -1,0 +1,174 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block othercss %}
+    <link rel="stylesheet" href="{% static 'css/basic.css' %}">
+    <link rel="stylesheet" href="{% static 'css/detail.css' %}">
+{% endblock %}
+
+{% block title %}<title> 发布系统｜发布详情 </title>{% endblock %}
+
+{% block nav %}
+<div class="nav">
+    <ul>
+        <li><a href="{% url 'release:index' %}" class="selected">首页</a></li>
+        <li><a href="{% url 'release:release' %}" target="_blank">开始发布</a></li>
+        <li><a href="{% url 'release:history' %}">发布历史</a></li>
+        <li><a href="{% url 'release:bsdetail' %}">发布地图</a></li>
+        <li><a href="http://10.40.1.38:9000/r_admin/index/" target="_blank">配置中心</a></li>
+    </ul>
+</div>
+{% endblock %}
+
+{% block main %}
+
+<div id="main">
+    <input type="hidden" name="taskid" value="{{data.taskid}}">
+    <div class="banner">
+        <div class="left">发布系统</div>
+        <div class="right">
+            <ul>
+                <li><a href="{% url 'release:index' %}">首页</a></li> >>
+                <li><a href="{% url 'release:release' %}">发布系统</a></li>>>
+                <li><span>发布详情</span></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="log">
+        <span class="title">日志筛选</span>
+        <ul>
+            <li>
+                <label class="project">项目：</label>
+                <select name="project"  class="select">
+                    <option value="{{data.project_code}}">{{data.project_name}}</option>
+                </select>
+            </li>
+            <li>
+                <label class="app">应用：</label>
+                <select name="app"  class="select">
+                    <option value="0">--选择应用--</option>
+                    {% for app in data.apps %}
+                        <option value="{{app}}">{{app}}</option>
+                    {% endfor %}
+                </select>
+            </li>
+            <li>
+                <label class="host">服务器：</label>
+                <select name="host"  class="select">
+                    <option value="0">--选择主机--</option>
+                    <option value="10.0.0.2">10.0.0.2</option>
+                </select>
+            </li>
+        </ul>
+        <input class="submit" type="button" name="getlog" value="选择" >
+    </div>
+
+    <div class="window_main">
+        <div class="step_info">
+            <p class="step_title">步骤</p>
+            <ul>
+                {% for step in data.steps %}
+                    {% if forloop.first %}
+                        <li class="selected">
+                            <input type="hidden" name="is_stoped" value="{{step.is_stoped}}" >
+                            {% ifequal step.is_stoped '0' %}
+                                <img class="left" src="{% static 'img/green_yuan.png' %}">
+                            {% else %}
+                                <img class="left" src="{% static 'img/red_yuan.png' %}">
+                            {% endifequal %}
+                            <input type="hidden" name="step_id" value="{{step.id}}" >
+                            <input type="hidden" name="step_name" value="{{step.name}}" >
+                            <a class="step_link" href="javascript:void(0)" >{{step.remark}}</a>
+                            <input type="hidden" name="comments" value="{{step.comments}}" >
+                            {% ifequal step.status '0' %}
+                                <img class="right"  style="display:none;" src="#">
+                            {% endifequal %}
+                            {% ifequal step.status '1' %}
+                                <img class="right" src="{% static 'img/loadding2.gif' %}">
+                            {% endifequal %}
+                            {% ifequal step.status '2' %}
+                                <img class="right" src="{% static 'img/right.png' %}">
+                            {% endifequal %}
+                            {% ifequal step.status '-1' %}
+                                <img class="right" src="{% static 'img/error.png' %}">
+                            {% endifequal %}
+                        </li>
+                    {% else %}
+                        <li>
+                            <input type="hidden" name="is_stoped" value="{{step.is_stoped}}" >
+                            {% ifequal step.is_stoped '0' %}
+                                <img class="left" src="{% static 'img/green_yuan.png' %}">
+                            {% else %}
+                                <img class="left" src="{% static 'img/red_yuan.png' %}">
+                            {% endifequal %}
+                            <input type="hidden" name="step_id" value="{{step.id}}" >
+                            <input type="hidden" name="step_name" value="{{step.name}}" >
+                            <a class="step_link" href="javascript:void(0)" >{{step.remark}}</a>
+                            <input type="hidden" name="comments" value="{{step.comments}}" >
+                            {% ifequal step.status '0' %}
+                                <img class="right"  style="display:none;" src="#">
+                            {% endifequal %}
+                            {% ifequal step.status '1' %}
+                                <img class="right" src="{% static 'img/loadding2.gif' %}">
+                            {% endifequal %}
+                            {% ifequal step.status '2' %}
+                                <img class="right" src="{% static 'img/right.png' %}">
+                            {% endifequal %}
+                            {% ifequal step.status '-1' %}
+                                <img class="right" src="{% static 'img/error.png' %}">
+                            {% endifequal %}
+                        </li>
+                    {% endif %}
+                {% endfor %}
+
+            </ul>
+        </div>
+        <div class="content">
+            <p class="detail_title">详情</p>
+            <div class="right">
+                <div class="info">
+                    <h5 class="step_remark_title">步骤描述</h5>
+                    <p class="step_remark_content">{{data.steps.0.comments}}</p>
+                    <input type="button" name="exec" value="执行" >
+                </div>
+                <div class="show_log">
+                    <h5>日志显示</h5>
+                    <input class="show_btn" name="show_all"  value="单窗口显示" type="hidden" >
+                    <textarea id="log_content" class="log_content"  readonly>
+ret_listis ,,;: true
+[14/Feb/2017 17:33:58] "GET /release/taskBegin/ HTTP/1.1" 302 0
+[14/Feb/2017 17:33:58] "GET /release/release/ HTTP/1.1" 200 2091
+dic111111: {'username': u'root', 'host': u'10.80.6.150', 'password': u'admin@123', 'remote_dir': u'/home/testftp/sit/HCS', 'port': u'22'}
+appnamelist 888888 : [u'LoginSYS', u'beehive', u'testapp']
+all_files is: [u'/home/testftp/sit/HCS/code/v100100/LoginSYS/LoginSYS.war']
+[INFO] is downloading remote file: /home/testftp/sit/HCS/code/v100100/LoginSYS/LoginSYS.war
+[INFO] download successed . download to local dir file: /home/django/release_20170213/release/Controllers/../../tasks/201702141733_1487064835/downloads/HCS/code/v100100/LoginSYS/LoginSYS.war
+all_files is: [u'/home/testftp/sit/HCS/config/v100100/LoginSYS/LoginSYS.conf', u'/home/testftp/sit/HCS/config/v100100/LoginSYS/WEB-INF/classes/dbconfig.properties', u'/home/testftp/sit/HCS/config/v100100/LoginSYS/WEB-INF/classes/config.properties', u'/home/testftp/sit/HCS/config/v100100/LoginSYS/bqapp/fc_test.apk', u'/home/testftp/sit/HCS/config/v100100/LoginSYS/bqapp/honeycomb_test.ipa']
+[INFO] is downloading remote file: /home/testftp/sit/HCS/config/v100100/LoginSYS/LoginSYS.conf
+ret_listis ,,;: true
+[14/Feb/2017 17:33:58] "GET /release/taskBegin/ HTTP/1.1" 302 0
+[14/Feb/2017 17:33:58] "GET /release/release/ HTTP/1.1" 200 2091
+dic111111: {'username': u'root', 'host': u'10.80.6.150', 'password': u'admin@123', 'remote_dir': u'/home/testftp/sit/HCS', 'port': u'22'}
+appnamelist 888888 : [u'LoginSYS', u'beehive', u'testapp']
+all_files is: [u'/home/testftp/sit/HCS/code/v100100/LoginSYS/LoginSYS.war']
+[INFO] is downloading remote file: /home/testftp/sit/HCS/code/v100100/LoginSYS/LoginSYS.war
+[INFO] download successed . download to local dir file: /home/django/release_20170213/release/Controllers/../../tasks/201702141733_1487064835/downloads/HCS/code/v100100/LoginSYS/LoginSYS.war
+all_files is: [u'/home/testftp/sit/HCS/config/v100100/LoginSYS/LoginSYS.conf', u'/home/testftp/sit/HCS/config/v100100/LoginSYS/WEB-INF/classes/dbconfig.properties', u'/home/testftp/sit/HCS/config/v100100/LoginSYS/WEB-INF/classes/config.properties', u'/home/testftp/sit/HCS/config/v100100/LoginSYS/bqapp/fc_test.apk', u'/home/testftp/sit/HCS/config/v100100/LoginSYS/bqapp/honeycomb_test.ipa']
+[INFO] is downloading remote file: /home/testftp/sit/HCS/config/v100100/LoginSYS/LoginSYS.conf
+                    </textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="error" >12345</div>
+
+<div id="footer">
+    <div class="content_left">联系我们: guanghua.fan@bqjr.cn&nbsp; &copy佰任金融 版权所有</div>
+</div>
+
+<script src="{% static 'js/detail.js' %}"></script>
+{% endblock %}
+

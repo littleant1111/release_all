@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block othercss %}
+<link href="{% static 'assets/toastr-2.1.2/toastr.min.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block title %}<title> 配置后台 ｜ 编辑机器 </title>{% endblock %}
+
+{% block main %}
+<div class="main">
+    <form id="edit-machine"  class="main-center" >
+        <div class="form-group ">
+            <label>机器名称：</label>
+            <input id="name" type="text" class="form-control" name="name"  value="{{data.data.name}}">
+        </div>
+        <div class="form-group ">
+            <label>主机名称：</label>
+            <input id="host" type="text" class="form-control" name="host" value="{{data.data.hostname}}">
+        </div>
+        <div class="form-group ">
+            <label>IP地址：</label>&nbsp;&nbsp;&nbsp;&nbsp;
+            <input id="ip" type="text" class="form-control" name="ip" value="{{data.data.ip}}">
+        </div>
+        <div class="radio pt0" id="vm">
+            <label class="mr10">
+                <input type="radio" name="vm"  class="bk-top5" value="0" {% ifequal data.data.is_vm 0 %}checked="checked"{% endifequal %}  >
+                <span class="bk-lh30">非虚拟机</span>
+            </label>
+            <label class="mr10">
+                <input type="radio" name="vm" class="bk-top5" value="1" {% ifequal data.data.is_vm 1 %}checked="checked"{% endifequal %}  >
+                <span class="bk-lh30">虚拟机</span>
+            </label>
+        </div>
+        <div class="form-group ">
+            <label>CPU信息：</label>
+            <input id="cpu" type="text" class="form-control" name="cpu" value="{{data.data.cpuinfo}}">
+        </div>
+        <div class="form-group ">
+            <label>内存信息：</label>
+            <input id="memory" type="text" class="form-control" name="memory" value="{{data.data.memoryinfo}}">
+        </div>
+        <label>机器所属环境：</label>
+        <div class="radio pt0 env" id="env">
+            <!--<label class="mr10">-->
+                <!--<input type="radio" name="env"  class="bk-top5" value="5">-->
+                <!--<span class="bk-lh30">UAT-B</span>-->
+            <!--</label>-->
+            {% for eachdata in data.envinfo %}
+                <label class="mr10">
+                    <input type="radio" name="env"  class="bk-top5" value="{{eachdata.0}}"   {% ifequal eachdata.0 data.data.env_id  %}checked="checked"{% endifequal %}    >
+                    <span class="bk-lh30">{{eachdata.1}}</span>
+                </label>
+            {% endfor %}
+        </div><!-- 机器所属环境 -->
+        <hr>
+        <ol class="my_errors"></ol>
+        <div class="form-group clearfix">
+            <div class="col-sm-9 col-sm-offset-3">
+                <input id="id" name="id"  type="hidden" value="{{data.data.id}}" >
+                <input id="submit" name="submit" type="submit" class="king-btn mr10  king-success"  value="保存" >
+            </div>
+        </div>
+    </form> <!-- end add-machine -->
+</div>
+<script src="{% static 'js/edit_machine.js' %}"></script>
+<script src="{% static 'assets/toastr-2.1.2/toastr.min.js' %}"></script>
+
+{% endblock %}
+
+

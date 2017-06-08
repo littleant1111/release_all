@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block othercss %}
+<link href="{% static 'assets/toastr-2.1.2/toastr.min.css' %}" rel="stylesheet">
+<link href="{% static 'css/machine_list.css' %}" rel="stylesheet">
+
+{% endblock %}
+
+{% block title %}<title> 配置后台 ｜ 机器列表 </title>{% endblock %}
+
+{% block main %}
+<div class="main">
+    <div class="refresh"><input class="input-admin" type="button" name="refresh" value="刷新"></div>
+    <div id="machine_list"  >
+        <table class="table mb0 pr15 ranger-box2  ">
+            <thead><tr>
+                <th style="width: 20px;">序号</th>
+                <th >名称</th>
+                <th>主机名称</th>
+                <th >IP</th>
+                <th >是否虚拟机</th>
+                <th >CPU信息</th>
+                <th >内存信息</th>
+                <th>操作</th>
+            </tr></thead>
+            <tbody>
+
+{% for eachdata in data %}
+    <tr>
+        <td>{{ forloop.counter }}</td>
+        <td>{{eachdata.1}}</td>
+        <td>{{eachdata.2}}</td>
+        <td>{{eachdata.3}}</td>
+        {% ifequal eachdata.4 0 %}
+            <td>否</td>
+        {% else %}
+            <td>是</td>
+        {% endifequal %}
+        <td>{{eachdata.5}}</td>
+        <td>{{eachdata.6}}</td>
+        <td>
+            <input class="input-admin" type="hidden" name="id" value="{{eachdata.0}}">
+            <input class="input-admin" type="button" name="edit" value="编辑">
+            <!--<a href="/r_admin/edit_machine/?id={{eachdata.0}}" target="_blank">编辑</a>-->
+            <input class="input-admin" type="button" name="delete" value="删除">
+        </td>
+    </tr>
+{% endfor %}
+            </tbody>
+        </table>
+    </div> <!-- machine list end -->
+</div>
+<script src="{% static 'assets/toastr-2.1.2/toastr.min.js' %}"></script>
+<script src="{% static 'js/machine_list.js' %}"></script>
+
+{% endblock %}

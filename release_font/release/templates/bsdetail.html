@@ -1,0 +1,136 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block othercss %}
+<link rel="stylesheet" href="{% static 'css/basic.css' %}">
+<link rel="stylesheet" href="{% static 'css/history.css' %}">
+
+<link href="//cdn.bootcss.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet">
+<link href="{% static 'css/dataTables.bootstrap.css' %}" rel="stylesheet"/>
+<link href="{% static 'css/bk.css' %}" rel="stylesheet">
+<link href="{% static 'css/select2.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block title %}<title> 发布系统｜发布地图 </title>{% endblock %}
+
+{% block nav %}
+<div class="nav">
+    <ul>
+        <li><a href="{% url 'release:index' %}">首页</a></li>
+        <li><a href="{% url 'release:release' %}" target="_blank">开始发布</a></li>
+        <li><a href="{% url 'release:history' %}">发布历史</a></li>
+        <li><a href="{% url 'release:bsdetail' %}"  class="selected" >发布地图</a></li>
+        <li><a href="http://10.40.1.38:9000/r_admin/index/" target="_blank">配置中心</a></li>
+    </ul>
+</div>
+{% endblock %}
+
+{% block main %}
+
+<div class="col-md-10" style="  width: 1024px;
+    min-height: 600px;
+    /*background: #ccc;*/
+    margin: 56px 10% auto 10%;
+    border: 1px solid #ccc;
+    box-shadow: 2px 3px 4px #888888;
+    position: relative;">
+    <div id="projectform" style="padding: 3px; margin: 3px">
+        <form id="selectsystem" method="post" action="/release/bsdetail/" style="margin-inside: 10px">
+   <select name="envchild_name"  class="select2_box" style="width:300px;">
+ {% for item in envchild %}
+
+       <option  value="{{ item }}">{{ item }}</option>            {% endfor %}
+
+
+    </select>
+            <!--{% for item in envchild %}-->
+
+            <!--<li>-->
+                <!--<label>-->
+                    <!--<input tabindex="3" type="radio" id="input-3" name="envchild_name" value="{{ item }}" checked=""> {{ item }}</label>-->
+            <!--</li>-->
+            <!--{% endfor %}-->
+               <!--</ul>-->
+            <input type="submit" value="查询" >
+        </form>
+    </div>
+            <div class="king-block king-block-bordered">
+                <div class="king-block-header king-gray-light">
+                    <h3 class="king-block-title"></h3>
+                </div>
+                        <hr />
+
+                <div class="king-block-content">
+
+                    <table id="table2_demo5" class="table table-bordered table-striped"
+                           style="TABLE-LAYOUT:fixed;WORD-BREAK:break-all">
+                        <thead>
+                        <tr>
+                            <th>环境</th>
+                            <th>项目名</th>
+                            <th>应用名</th>
+                            <th>IP</th>
+                            <th>用户</th>
+                            <th>发布路径</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for item in data %}
+                        <tr>
+                            <td>{{ item.envchild_name}}</td>
+                            <td>{{ item.project_name}}</td>
+                            <td>{{ item.app_name}}</td>
+                            <td>{{ item.ip}}</td>
+                            <td>{{ item.user}}</td>
+                            <td>{{ item.appdir}}</td>
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+</div>
+<script src="{% static 'js/jquery.dataTables.js' %}"></script>
+<script src="{% static 'js/dataTables.bootstrap.js' %}"></script>
+<!--<script src="{% static 'js/bsdetail.js' %}"></script>-->
+<script type="text/javascript">
+    ///合并表格相同行的内容
+    ///tableId：表格ID（最好是tbody，避免把表尾给合并了)
+    ///startRow：起始行，没有标题就从0开始
+    ///endRow：终止行，此参数是递归时检查的范围，一开始时会自动赋值为最后一行
+    ///col：当前处理的列
+    function MergeCell(tableId, startRow, endRow, col) {
+        var tb = document.getElementById(tableId);
+        if (col >= tb.rows[0].cells.length) {
+            return;
+        }
+        //当检查第0列时检查所有行
+        if (col == 0) {
+            endRow = tb.rows.length - 1;
+        }
+        for (var i = startRow; i < endRow; i++) {
+            //subCol:已经合并了多少列
+            var subCol = tb.rows[0].cells.length - tb.rows[startRow].cells.length;
+            //程序是自左向右合并，所以下一行一直取第0列
+            if (tb.rows[startRow].cells[col - subCol].innerHTML == tb.rows[i + 1].cells[0].innerHTML) {
+                //如果相同则删除下一行的第0列单元格
+                tb.rows[i + 1].removeChild(tb.rows[i + 1].cells[0]);
+                //更新rowSpan属性
+                tb.rows[startRow].cells[col - subCol].rowSpan = (tb.rows[startRow].cells[col - subCol].rowSpan | 0) + 1;
+                //当循环到终止行前一行并且起始行和终止行不相同时递归(因为上面的代码已经检查了i+1行，所以此处只到endRow-1)
+                if (i == endRow - 1 && startRow != endRow) {
+                    MergeCell(tableId, startRow, endRow, col + 1);
+                }
+            } else {
+                //起始行，终止行不变，检查下一列
+                MergeCell(tableId, startRow, i, col + 1);
+                //增加起始行
+                startRow = i + 1;
+            }
+        }
+    }
+    MergeCell('table2_demo5', 0, 0, 0);
+</script>
+{% endblock %}
+

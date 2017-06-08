@@ -1,0 +1,58 @@
+{% load staticfiles %}
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+
+    <!--  logo    -->
+    <link rel="icon" href="{% static 'img/logo.png' %}" type="image/x-icon">
+    <link rel="shortcut icon" href="{% static 'img/logo.png' %}" type="image/x-icon">
+
+    <!--    bootstrap  css  -->
+    <!--<link rel="stylesheet" href="{% static 'bootstrap/css/main.css' %}">-->
+    <!--<link rel="stylesheet" href="{% static 'bootstrap/css/titatoggle-dist-min.css' %}">-->
+    <!--<link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">-->
+
+    <!--  artDialog css   -->
+    <!--<link rel="stylesheet" href="{% static 'artDialog/css/ui-dialog.css' %}">-->
+    <!--  jquery-ui css   -->
+    <link rel="stylesheet" href="http://www.jq22.com/jquery/jquery-ui-1.11.0.css">
+
+    <!--  jquery js/bootstrap js  -->
+    <script src="http://www.jq22.com/jquery/jquery-1.10.2.js"></script>
+    <script src="http://www.jq22.com/jquery/jquery-ui-1.11.0.js"></script>
+    <!--<script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>-->
+    <!--  artDialog js  -->
+    <!--<script src="{% static 'artDialog/dist/dialog-min.js' %}"></script>-->
+
+    {% block othercss %}{% endblock %}
+    {% block title %}{% endblock %}
+
+</head>
+<body>
+
+{% if user.is_authenticated  %}
+    <div id="header">
+        <div class="header_main">
+            <div class="logo">发布系统</div>
+            {% block nav %}{% endblock %}
+            <div class="profile">
+                <dl>
+                    <dd><a class="person" href="{% url 'release:password_change' %}">{{ user.username }}</a></dd>|
+                    <dd><a class="person" href="{% url 'release:logout' %}">退出</a></dd>
+                </dl>
+            </div>
+
+        </div>
+    </div>
+
+    {% block main %}{% endblock %}
+
+{% endif %}
+
+{% block content %}{% endblock %}
+{% block footer %}{% endblock %}
+{% block scripts %}{% endblock %}
+
+</body>
+</html>

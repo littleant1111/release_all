@@ -1,0 +1,140 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block othercss %}
+    <link rel="stylesheet" href="{% static 'css/basic.css' %}">
+    <link rel="stylesheet" href="{% static 'css/release.css' %}">
+{% endblock %}
+
+{% block title %}<title> 发布系统｜发布页面 </title>{% endblock %}
+
+{% block nav %}
+    <div class="nav">
+        <ul>
+            <li><a href="{% url 'release:index' %}" >首页</a></li>
+            <li><a href="{% url 'release:release' %}"  target="_blank" class="selected">开始发布</a></li>
+            <li><a href="{% url 'release:history' %}"   >发布历史</a></li>
+            <li><a href="{% url 'release:bsdetail' %}">发布地图</a></li>
+            <li><a href="http://10.40.1.38:9000/r_admin/index/" target="_blank">配置中心</a></li>
+        </ul>
+    </div>
+{% endblock %}
+
+{% block main %}
+<div id="main">
+    <div class="banner">
+        <div class="left">发布系统</div>
+        <div class="right">
+            <ul>
+                <li><a href="{% url 'release:index' %}">首页</a></li> >>
+                <li><a href="{% url 'release:release' %}">发布系统</a></li>>>
+                <li><span>新增发布项目</span></li>
+            </ul>
+        </div>
+    </div>
+    <div class="stage">
+        <span class="title">发布阶段：</span>
+        <ul>
+            <li><label><input name="stage" type="radio" value="sit"  />sit</label></li>
+            <li><label><input name="stage" type="radio" value="uat"  />uat</label></li>
+            <li><label><input name="stage" type="radio" value="pre" />pre</label></li>
+            <li><label><input name="stage" type="radio" value="prd" />prd</label></li>
+        </ul>
+    </div>
+    <div class="pro_main">
+        <div class="env">
+            <p class="title">发布环境：</p>
+            <ul>
+                <!--<li><label><input name="envtype" type="radio" value="0" />sit1</label></li>-->
+                <!--<li><label><input name="envtype" type="radio" value="0" />sit2</label></li>-->
+                <!--<li><label><input name="envtype" type="radio" value="0" />sit3</label></li>-->
+                <!--<li><label><input name="envtype" type="radio" value="0" />sit4</label></li>-->
+            </ul>
+        </div>
+        <div class="project project_name">
+            <label class="pname">项目名称：</label>
+            <select name="project"  class="select">
+                <!--<option value="0">蜂巢系统</option>-->
+                <!--<option value="0">安硕核心</option>-->
+            </select>
+        </div>
+        <div class="project version">
+            <label class="pname">系统版本：</label>
+            <select name="version"  class="select">
+                <!--<option value="0">v00100</option>-->
+                <!--<option value="0">v00101</option>-->
+                <!--<option value="0">v00102</option>-->
+                <!--<option value="0">v00103</option>-->
+                <!--<option value="0">v00104</option>-->
+            </select>
+        </div>
+        <div class="apps">
+            <p class="title">选择应用：</p>
+            <p class="all">
+                <label><input name="all" type="checkbox" value="all" />全选</label>&nbsp;&nbsp;
+                <label><input name="notall" type="checkbox" value="all" />全不选</label>
+            </p>
+            <div class="select_app">
+                <!--<label><input name="app" type="checkbox" value="LoginSYS.war" />LoginSYS.war</label>-->
+                <!--<label><input name="app" type="checkbox" value="beehive.war" />beehive.war</label>-->
+                <!--<label><input name="app" type="checkbox" value="testapp.war" />testapp.war</label>-->
+                <!--<label><input name="app" type="checkbox" value="AutoTaskFront.war" />AutoTaskFront.war</label>-->
+                <!--<label><input name="app" type="checkbox" value="CoreInterface.war" />CoreInterface.war</label>-->
+                <!--<label><input name="app" type="checkbox" value="DataCenter.war" />DataCenter.war</label>-->
+            </div>
+        </div>
+    </div>
+
+    <div class="btns">
+        <ul>
+            <li><input type="button" name="comfirm" value="确认发布"></li>
+        </ul>
+    </div>
+</div>
+
+<div id="comfirm">
+    <div class="project stage">
+        <p>
+            <span class="info">发布阶段：</span>
+            <span class="content" id="stage" >sit</span>
+        </p>
+    </div>
+    <div class="project env">
+        <p>
+            <span class="info">发布环境：</span>
+            <span class="content" id="env" >sit1</span>
+        </p>
+    </div>
+    <div class="project_info">
+        <ul class="project_name">
+            <li><span>项目名称：</span></li>
+            <li class="content" id="pro_name" >蜂巢系统</li>
+        </ul>
+        <ul class="project_code">
+            <li><span>项目编码：</span></li>
+            <li class="content"  id="pro_code" >HCS</li>
+        </ul>
+        <ul class="project_version">
+            <li><span>系统版本：</span></li>
+            <li class="content" id="pro_version" >v100100</li>
+        </ul>
+    </div>
+    <div class="app">
+        <span class="title">发布应用：</span>
+        <ul class="content" id="apps">
+            <li>LoginSYS.war</li>
+            <li>beehive.war</li>
+        </ul>
+    </div>
+</div>
+
+<div id="loadding" ><img src="{% static 'img/loadding2.gif' %}" > 数据加载中 ...</div>
+<div id="error" >123456</div>
+<div id="error2" >123456</div>
+
+<div id="footer">
+    <div class="content_left">联系我们: guanghua.fan@bqjr.cn&nbsp; &copy佰任金融 版权所有</div>
+</div>
+
+<script src="{% static 'js/release.js' %}"></script>
+{% endblock %}

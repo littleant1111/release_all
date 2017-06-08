@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block othercss %}
+    <link rel="stylesheet" href="{% static 'css/basic.css' %}">
+    <link rel="stylesheet" href="{% static 'css/config.css' %}">
+{% endblock %}
+
+{% block title %}<title> 发布系统｜配置中心 </title>{% endblock %}
+
+{% block nav %}
+<div class="nav">
+    <ul>
+        <li><a href="{% url 'release:index' %}" class="selected">首页</a></li>
+        <li><a href="{% url 'release:release' %}" target="_blank">开始发布</a></li>
+        <li><a href="{% url 'release:history' %}">发布历史</a></li>
+        <li><a href="{% url 'release:bsdetail' %}">发布地图</a></li>
+        <li><a href="http://10.40.1.38:9000/r_admin/index/" target="_blank">配置中心</a></li>
+    </ul>
+</div>
+{% endblock %}
+
+{% block main %}
+
+<div id="main">
+    <div class="banner">
+        <div class="left">发布系统</div>
+        <div class="right">
+            <ul>
+                <li><a href="{% url 'release:index' %}">首页</a></li> >>
+                <li><span>配置中心</span></li>
+            </ul>
+        </div>
+    </div>
+    <div class="config_main">配置页面开发中。。。</div>
+</div>
+<div id="footer">
+    <div class="content_left">联系我们: guanghua.fan@bqjr.cn&nbsp; &copy佰任金融 版权所有</div>
+</div>
+
+{% endblock %}
+
+
+
+
+

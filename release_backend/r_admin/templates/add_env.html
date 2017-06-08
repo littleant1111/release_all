@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block othercss %}
+<link href="{% static 'assets/toastr-2.1.2/toastr.min.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block title %}<title> 配置后台 ｜ 添加环境 </title>{% endblock %}
+
+{% block main %}
+<div class="main">
+    <form id="add_env" >
+        <div class="form-group ">
+            <label>环境名称：</label>
+            <input type="text" class="form-control" name="name" placeholder="填写环境名称，如填写：sit1">
+        </div>
+        <label>环境所属发布阶段：</label>
+        <div class="radio pt0">
+            <label class="mr10">
+                <input type="radio" name="env"  class="bk-top5" value="1">
+                <span class="bk-lh30">dev</span>
+            </label>
+            <label class="mr10">
+                <input type="radio"  name="env"  class="bk-top5" value="2">
+                <span class="bk-lh30">sit</span>
+            </label>
+            <label class="mr10">
+                <input type="radio" name="env"  class="bk-top5" value="3">
+                <span class="bk-lh30">uat</span>
+            </label>
+            <label class="mr10">
+                <input type="radio"name="env"  class="bk-top5" value="4">
+                <span class="bk-lh30">pre</span>
+            </label>
+            <label class="mr10">
+                <input type="radio" name="env"  class="bk-top5" value="5">
+                <span class="bk-lh30">prd</span>
+            </label>
+        </div>
+        <hr>
+        <ol class="my_errors"></ol>
+        <div class="form-group clearfix">
+            <div class="col-sm-9 col-sm-offset-3">
+                <input id="submit" type="submit" class="king-btn mr10  king-success" value="提交">
+            </div>
+        </div>
+    </form> <!-- end of 发布阶段 -->
+
+</div>
+<script src="{% static 'js/add_env.js' %}"></script>
+<script src="{% static 'assets/toastr-2.1.2/toastr.min.js' %}"></script>
+
+{% endblock %}

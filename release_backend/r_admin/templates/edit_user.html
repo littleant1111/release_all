@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block othercss %}
+<link href="{% static 'assets/toastr-2.1.2/toastr.min.css' %}" rel="stylesheet">
+<link href="{% static 'css/add_user.css' %}" rel="stylesheet">
+
+{% endblock %}
+
+{% block title %}<title> 配置后台 ｜ 编辑用户 </title>{% endblock %}
+
+{% block main %}
+<div class="main">
+    <div class="refresh"><input class="input-admin" type="button" name="refresh" value="刷新"></div>
+    <div class="clear"></div>
+    <form id="add_user" >
+        <div class="form-group ">
+            <label>&nbsp;&nbsp;用&nbsp;&nbsp;&nbsp;&nbsp;户：</label>&nbsp;&nbsp;&nbsp;&nbsp;
+            <input id="user" type="text" class="form-control" name="user" value="{{data.user.0.1}}">
+        </div>
+        <div class="form-group ">
+            <label>&nbsp;&nbsp;密&nbsp;&nbsp;&nbsp;&nbsp;码：</label>&nbsp;&nbsp;&nbsp;&nbsp;
+            <input id="password" type="password" class="form-control" name="password" value="{{data.user.0.2}}">
+        </div>
+        <div class="form-group ">
+            <label>用户家目录：</label>
+            <input id="homedir" type="text" class="form-control" name="homedir" value="{{data.user.0.3}}">
+        </div>
+        <div class="form-group ">
+            <label>&nbsp;&nbsp;ssh端口：</label>&nbsp;&nbsp;&nbsp;
+            <input id="sshport" type="text" class="form-control" name="sshport" value="{{data.user.0.5}}">
+        </div>
+        <br><label>所属主机：</label><br>
+{% for eachdata in data.machine %}
+    {% if forloop.counter|divisibleby:5 %}
+        <br>
+        <label class="mr10">
+            <input type="radio" name="machine_id"  class="bk-top5" value="{{eachdata.0}}" {% ifequal eachdata.0 data.user.0.4  %}checked="checked"{% endifequal %}>
+            <input type="hidden" name="hostname"  class="bk-top5" value="{{eachdata.2}}">
+            <input type="hidden" name="ip"  class="bk-top5" value="{{eachdata.3}}">
+            <span class="bk-lh30">{{eachdata.2}}({{eachdata.3}})</span>
+        </label>
+    {% else %}
+        <label class="mr10">
+            <input type="radio" name="machine_id"  class="bk-top5" value="{{eachdata.0}}" {% ifequal eachdata.0 data.user.0.4  %}checked="checked"{% endifequal %}>
+            <input type="hidden" name="hostname"  class="bk-top5" value="{{eachdata.2}}">
+            <input type="hidden" name="ip"  class="bk-top5" value="{{eachdata.3}}">
+            <span class="bk-lh30">{{eachdata.2}}({{eachdata.3}})</span>
+        </label>
+    {% endif %}
+{% endfor %}
+
+        <ol class="my_errors"></ol>
+        <div class="form-group clearfix">
+            <div class="col-sm-9 col-sm-offset-3">
+                <input id="id" type="hidden"  value="{{data.user.0.0}}" >
+                <input id="submit" type="submit" class="king-btn mr10  king-success" value="提交" >
+            </div>
+
+        </div>
+    </form> <!-- end of add user -->
+
+</div>
+<script src="{% static 'js/edit_user.js' %}"></script>
+<script src="{% static 'assets/toastr-2.1.2/toastr.min.js' %}"></script>
+
+{% endblock %}
+

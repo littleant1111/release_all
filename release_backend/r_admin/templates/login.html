@@ -1,0 +1,45 @@
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <!--新 Bootstrap 核心 CSS 文件-->
+    <link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <!-- 可选的Bootstrap主题文件 -->
+    <link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+    <!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
+    <script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
+    <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+    <script src="//cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+</head>
+{% block title %}<title> 发布系统｜登录</title>{% endblock %}
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-5 col-sm-offset-3 col-md-4 col-md-offset-4">
+                <div class="login center-block">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">
+                            <h3 class="panel-title"><strong>请输入用户名和密码</strong></h3>
+                        </div>
+                        <div class="panel-body">
+                            <form action='' method='post'>
+                                {% csrf_token %}
+                                <label for="username">用户名:</label>
+                                <input class="form-control" type="text" name="username" value="" id="username" placeholder="username" required><br>
+                                <label for="password">密码:</label>
+                                <input class="form-control" type="password" name="password" value="" id="password" placeholder="password" required><br>
+                                <div class="btn-group-justified" role="group">
+                                    <div class="btn-group" role="group">
+                                        <button type="submit" class="btn btn-primary">登 录</button>
+                                    </div>
+                                </div>
+                                <input type="hidden" name="next" value="{{ next }}" />
+                                <script type="text/javascript">document.getElementById("username").focus();</script>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
