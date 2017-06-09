@@ -1,11 +1,11 @@
 # release_all
-包括2部分，发布前端和后端，按理安装django 设计，前端及模型设计好后，自带管理后端，但是考虑多人开发的情况，所以后端就是单独的应用来管理；
+包括2部分，发布前端和后端，按理安装django 设计，前端及模型设计好后，自带管理后端，但是考虑多人开发的情况，所以后端就是单独的应用来管理；<br />
 
-前端应用开发设计到 python sftp / paramiko / 多线程 / 和远程同步执行shell脚本等功能
+前端应用开发设计到 python sftp / paramiko / 多线程 / 和远程同步执行shell脚本等功能<br />
 
-前端应用的前端技术布局部门采取magicbox 和bootstrap + 和自定义css布局、jquery+ ajax。
+前端应用的前端技术布局采用 magicbox 和 bootstrap + 和自定义css布局、jquery+ ajax。<br />
 
-前端demo： http://release.zdyw.tech/
+前端demo： http://release.zdyw.tech/<br />
 
 设计背景介绍：<br />
 简单的发布如tomcat 就是将 *.war 包拷贝到目标应用 webapps 下，重启tomcat 是否启动成功；<br />
