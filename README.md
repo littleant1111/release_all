@@ -5,7 +5,7 @@
 
 前端应用的前端技术布局采用 magicbox 和 bootstrap + 和自定义css布局、jquery+ ajax。<br />
 
-前端demo： http://release.zdyw.tech/<br />
+前端demo： http://120.27.119.83:8081/<br />
 
 设计背景介绍：<br />
 简单的发布如tomcat 就是将 *.war 包拷贝到目标应用 webapps 下，重启tomcat 是否启动成功；<br />
